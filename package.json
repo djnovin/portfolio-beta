@@ -9,12 +9,35 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^1.12.0",
+    "@prisma/client": "^4.5.0",
     "next": "13.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-prisma": "^4.5.0",
+    "tailwindcss": "^3.2.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "autoprefixer": "^10.4.13",
     "eslint": "8.26.0",
-    "eslint-config-next": "13.0.0"
-  }
+    "eslint-config-next": "13.0.0",
+    "jest": "^29.2.2",
+    "jest-environment-jsdom": "^29.2.2",
+    "postcss": "^8.4.18",
+    "prisma": "^4.5.0"
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djnovin/portfolio-beta.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/djnovin/portfolio-beta/issues"
+  },
+  "homepage": "https://github.com/djnovin/portfolio-beta#readme"
 }
