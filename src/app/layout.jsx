@@ -1,5 +1,6 @@
 import "tailwindcss/tailwind.css"
-
+import AnalyticsWrapper from './Analytics';
+ 
 import Link from "next/link"
 import NavLink from "../components/NavLink"
 import Banner from "../components/Banner"
@@ -28,6 +29,7 @@ const RootLayout = ({ children }) => {
             </header>
             <section className="px-6">
                 <div>{children}</div>
+                <AnalyticsWrapper />
             </section>
             </body>
         </html>

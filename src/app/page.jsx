@@ -3,7 +3,7 @@
 const Page = () => {
     return (
     <>
-      <h1>Level up your Sound Now</h1>
+      <h1>This is Home Page</h1>
     </>
       )
   }

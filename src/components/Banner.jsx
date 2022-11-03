@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/router";
 import Link from "next/link"
 import { useSelectedLayoutSegments } from "next/navigation"
 

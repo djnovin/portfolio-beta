@@ -1,20 +1,32 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import Data from '../lib/data'
+import BlogCard from './BlogCard'
 
-const Feed = ({ posts }) => {
+import { use } from "react"
+
+import { PrismaClient } from "@prisma/client"
+const prisma = new PrismaClient()
+
+const getPosts = async() => {
+    const posts = await prisma.post.findMany()
+    return posts
+}
+
+const BlogFeed = async() => {
+    const posts = await getPosts()
+    console.log(posts)
     return (
         <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {posts?.map((post) => (
-                    <div key={post.id}>
-                        <h1 className="text-4xl font-semibold dark:text-white">{post.title}</h1>
-                        <h2 className="text-xs font-light dark:text-white">{post.createdAt}</h2>
-                    </div>
+                    <Link href={`/blog/${post.id}`} key={post.id}>
+                        <BlogCard />
+                    </Link>
                 ))}
             </div>
         </div>
     )
 }
 
-export default Feed
+export default BlogFeed
