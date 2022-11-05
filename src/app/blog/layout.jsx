@@ -11,7 +11,7 @@ const Layout = async({ children }) => {
     console.log(posts)
     return (
     <>
-        <div className="pb-48">{children}</div>
+        <div className="px-4 pb-48">{children}</div>
     </>
     )
 }

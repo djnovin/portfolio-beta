@@ -3,11 +3,11 @@ import AnalyticsWrapper from './Analytics';
  
 import Link from "next/link"
 import NavLink from "../components/NavLink"
+import NavBar from "../components/NavBar";
 import Banner from "../components/Banner"
 
 
 const RootLayout = ({ children }) => {
-
     return (
         <html lang="en">
           <head>
@@ -15,22 +15,18 @@ const RootLayout = ({ children }) => {
             <title>Next.js</title>
           </head>
           <body className="dark:bg-black">
+            <div className="">
             <section>
               <Banner />
             </section>
-            <header className="flex flex-row w-full justify-between align-middle py-4 px-6">
-                <div>
-                  <Link className="font-bold dark:text-white" href="/">NOVIN</Link>
-                </div>
-                <div className="flex flex-row gap-4">
-                  <NavLink  href="/">Home</NavLink>
-                  <NavLink  href="/blog">Blog</NavLink>
-                </div>
+            <header className="flex flex-row w-full justify-between items-center align-middle">
+              <NavBar />
             </header>
-            <section className="px-6">
-                <div>{children}</div>
+            <section className="">
+                <div className="">{children}</div>
                 <AnalyticsWrapper />
             </section>
+            </div>
             </body>
         </html>
       );

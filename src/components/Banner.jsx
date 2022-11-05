@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useSelectedLayoutSegments } from "next/navigation"
 
-const Banner = ({ href, children }) => {
+const Banner = ({ href }) => {
 
     let segment = useSelectedLayoutSegments()
     let active = href === `/${segment}`
