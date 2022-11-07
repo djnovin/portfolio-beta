@@ -25,7 +25,7 @@ const Page = async() => {
         {posts?.map((post) => (
                 <Link href={`/blog/${post.id}`} key={post.id}>
                             <div>
-                                <div className="relative w-full h-full mb-6 overflow-hidden">
+                                <div className="relative w-full h-full mb-6 hover:shadow-lg rounded-md overflow-hidden">
                                     <Image 
                                     height={960}
                                     width={1080}
