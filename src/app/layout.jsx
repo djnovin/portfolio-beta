@@ -1,18 +1,13 @@
 "use client"
+import { ThemeProvider } from "next-themes";
 
 import "tailwindcss/tailwind.css"
 import AnalyticsWrapper from './Analytics';
  
-import Link from "next/link"
-import NavLink from "../components/NavLink"
 import NavBar from "../components/NavBar";
 import Banner from "../components/Banner"
 
-import { useState, createContext } from "react"
-import ThemeContext from "../context/ThemeContext"
-
 const RootLayout = ({ children }) => {
-  const [theme, setTheme] = useState('light');
     return (
         <html lang="en">
           <head>
@@ -20,7 +15,7 @@ const RootLayout = ({ children }) => {
             <title>Next.js</title>
           </head>
               <body className="dark:bg-black">
-                <ThemeContext.Provider value={{theme}}>
+                <ThemeProvider>
                   <div className="">
                   <section>
                     <Banner />
@@ -33,9 +28,8 @@ const RootLayout = ({ children }) => {
                   </section>
                   </div>
                   <AnalyticsWrapper />
-                </ThemeContext.Provider>
-                </body>
-
+                </ThemeProvider>
+              </body>
         </html>
       );
     }    

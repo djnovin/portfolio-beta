@@ -17,9 +17,9 @@ const Banner = ({ href }) => {
     }
     else {
         return (
-            <div className="bg-blue-600 text-white w-full flex flex-col gap-1 px-6 pt-12 md:py-2 md:align-center pb-6 md:justify-center md:flex-row transition-all duration-300">
-            <p className="text-sm font-semibold">🎉 Your FREE one on one consultation is set to expire soon. RESERVE your spot now!</p>
-            <Link className="underline text-sm font-light hover:text-gray-300 transition-all duration-300" href="/">Claim Now →</Link>
+            <div className=" bg-purple-600 w-full flex flex-col gap-1 px-6 pt-10 md:py-2 md:align-center pb-6 md:justify-center md:flex-row transition-all duration-300">
+            <p className="text-sm text-white font-semibold">🎉 Enjoy the Content? Subscribe to the blog now! </p>
+            <Link className="underline text-sm text-white font-light hover:text-gray-300 transition-all duration-300" href="/">Subscribe Now →</Link>
         </div>
         )
     }
