@@ -1,4 +1,3 @@
-import AnalyticsWrapper from './Analytics'
 import { Analytics } from '@vercel/analytics/react'
 
 const RootLayout = ({ children }) => {
