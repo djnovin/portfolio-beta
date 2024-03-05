@@ -1,3 +1,4 @@
+const withMDX = require('@next/mdx')()
 // @ts-check
 
 /**
@@ -7,10 +8,12 @@ const nextConfig = {
     experimental: {
         typedRoutes: true
     },
+    pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+    mdxRs: true,
     images: {
         formats: ['image/webp'],
         unoptimized: true
     }
 }
 
-module.exports = nextConfig
+module.exports = withMDX(nextConfig)
