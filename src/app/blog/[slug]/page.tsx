@@ -1,11 +1,18 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import { blogs } from '@/constants/blog'
 import Link from 'next/link'
 import cn from 'classnames'
 import { Category } from '@/components/Categories'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import fs from 'fs'
+import path from 'path'
 
 const getBlog = (slug: string) => {
     return blogs.find(blog => blog.slug === slug)
+}
+
+const getBlogByCategory = (category: string) => {
+    return blogs.filter(blog => blog.category === category)
 }
 
 const Breadcrumbs = ({
@@ -33,6 +40,15 @@ const Breadcrumbs = ({
     )
 }
 
+const RemoteMdxPage = ({ slug }: { slug: string }) => {
+    const source = fs.readFileSync(
+        path.join(process.cwd(), 'src/app/mdx', `${slug}.mdx`),
+        'utf8'
+    )
+
+    return <MDXRemote source={source} />
+}
+
 export default function page({ params }: { params: { slug: string } }) {
     const blog = getBlog(params.slug)
 
@@ -47,9 +63,7 @@ export default function page({ params }: { params: { slug: string } }) {
                     ]}
                 />
             )}
-            {blog && <h1>{blog.title}</h1>}
-            {blog && <Category category={blog.category} />}
-            {blog && <p>{blog.content}</p>}
+            <RemoteMdxPage slug={params.slug} />
         </div>
     )
 }
