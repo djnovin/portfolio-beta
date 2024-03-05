@@ -20,6 +20,7 @@ const Breadcrumbs = ({
                         className={cn('hover:underline', {
                             underline: index >= crumbs.length - 1
                         })}
+                        // @ts-ignore
                         href={crumb.path}
                     >
                         {crumb.label}
