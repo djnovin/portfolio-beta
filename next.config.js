@@ -1,17 +1,16 @@
-/** @type {import('next').NextConfig} */
-module.exports = {
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ **/
+const nextConfig = {
     experimental: {
-        appDir: true
+        typedRoutes: true
     },
     images: {
         formats: ['image/webp'],
-        domains: ['blogbucket.images.s3.ap-southeast-2.amazonaws.com'],
-        unoptimized: false,
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: 's3.ap-southeast-2.amazonaws.com'
-            }
-        ]
+        unoptimized: true
     }
 }
+
+module.exports = nextConfig
