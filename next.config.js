@@ -5,6 +5,9 @@ const withMDX = require('@next/mdx')()
  * @type {import('next').NextConfig}
  **/
 const nextConfig = {
+    compiler: {
+        removeConsole: true
+    },
     experimental: {
         typedRoutes: true,
         mdxRs: true
