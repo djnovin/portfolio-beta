@@ -6,34 +6,10 @@ import path from 'path'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { blogs } from '@/constants/blog'
 import { useMDXComponents } from '../../../mdx-components'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 
 const getBlog = (slug: string) => {
     return blogs.find(blog => blog.slug === slug)
-}
-
-const Breadcrumbs = ({
-    crumbs
-}: {
-    crumbs: { label: string; path: string }[]
-}) => {
-    return (
-        <div>
-            {crumbs.map((crumb, index) => (
-                <span key={index}>
-                    <Link
-                        className={cn('hover:underline', {
-                            underline: index >= crumbs.length - 1
-                        })}
-                        // @ts-ignore
-                        href={crumb.path}
-                    >
-                        {crumb.label}
-                    </Link>
-                    {index < crumbs.length - 1 && <span> / </span>}
-                </span>
-            ))}
-        </div>
-    )
 }
 
 const RemoteMdxPage = ({ slug }: { slug: string }) => {
