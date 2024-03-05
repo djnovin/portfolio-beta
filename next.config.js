@@ -6,10 +6,10 @@ const withMDX = require('@next/mdx')()
  **/
 const nextConfig = {
     experimental: {
-        typedRoutes: true
+        typedRoutes: true,
+        mdxRs: true
     },
     pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
-    mdxRs: true,
     images: {
         formats: ['image/webp'],
         unoptimized: true
