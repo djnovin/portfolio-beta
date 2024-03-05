@@ -1,19 +1,14 @@
-import React, { lazy } from 'react'
-import { blogs } from '@/constants/blog'
 import Link from 'next/link'
+import React from 'react'
 import cn from 'classnames'
-import { Category } from '@/components/Categories'
-import { MDXRemote } from 'next-mdx-remote/rsc'
 import fs from 'fs'
 import path from 'path'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import { blogs } from '@/constants/blog'
 import { useMDXComponents } from '../../../mdx-components'
 
 const getBlog = (slug: string) => {
     return blogs.find(blog => blog.slug === slug)
-}
-
-const getBlogByCategory = (category: string) => {
-    return blogs.filter(blog => blog.category === category)
 }
 
 const Breadcrumbs = ({
