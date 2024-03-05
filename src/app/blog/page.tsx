@@ -1,3 +1,4 @@
+import { Category } from '@/components/Categories'
 import { blogs } from '@/constants/blog'
 import Link from 'next/link'
 import React from 'react'
@@ -11,9 +12,19 @@ const page = () => {
     ) : (
         <div className='h-screen px-8'>
             {blogs.map(blog => (
-                <div key={blog.id}>
-                    <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
-                </div>
+                <Link
+                    className='flex flex-row justify-between items-center gap-2 group'
+                    key={blog.id}
+                    href={`/blog/${blog.slug}`}
+                >
+                    <div className='flex flex-row items-center gap-2'>
+                        <Category category={blog.category} />
+                        <span className='group-hover:underline'>
+                            {blog.title}
+                        </span>
+                    </div>
+                    <span className='text-gray-500'>{blog.date}</span>
+                </Link>
             ))}
         </div>
     )

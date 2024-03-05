@@ -2,6 +2,7 @@ import React from 'react'
 import { blogs } from '@/constants/blog'
 import Link from 'next/link'
 import cn from 'classnames'
+import { Category } from '@/components/Categories'
 
 const getBlog = (slug: string) => {
     return blogs.find(blog => blog.slug === slug)
@@ -47,7 +48,7 @@ export default function page({ params }: { params: { slug: string } }) {
                 />
             )}
             {blog && <h1>{blog.title}</h1>}
-            {blog && <p>{blog.date}</p>}
+            {blog && <Category category={blog.category} />}
             {blog && <p>{blog.content}</p>}
         </div>
     )
