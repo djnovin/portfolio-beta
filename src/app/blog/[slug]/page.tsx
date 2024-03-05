@@ -3,7 +3,7 @@ import React from 'react'
 import cn from 'classnames'
 import fs from 'fs'
 import path from 'path'
-import MDXRemote from 'next-mdx-remote/rsc'
+import { MDXRemote } from 'next-mdx-remote/rsc'
 import { blogs } from '@/constants/blog'
 import { useMDXComponents } from '../../../mdx-components'
 
