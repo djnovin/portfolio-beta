@@ -6,6 +6,7 @@ import { Category } from '@/components/Categories'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import fs from 'fs'
 import path from 'path'
+import { useMDXComponents } from '../../../mdx-components'
 
 const getBlog = (slug: string) => {
     return blogs.find(blog => blog.slug === slug)
@@ -46,7 +47,58 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
         'utf8'
     )
 
-    return <MDXRemote source={source} />
+    const typographicRatios = {
+        h1: 16 * 1.75 * 3,
+        h2: 16 * 1.75 * 2,
+        h3: 16 * 1.75 * 1,
+        p: 16
+    }
+
+    return (
+        <MDXRemote
+            source={source}
+            components={
+                useMDXComponents({
+                    h1: ({ children }) => (
+                        <h1
+                            style={{
+                                fontSize: typographicRatios.h1 + 'px',
+                                lineHeight: typographicRatios.h1 * 1.2 + 'px',
+                                margin: '20px 0'
+                            }}
+                        >
+                            {children}
+                        </h1>
+                    ),
+                    h2: ({ children }) => (
+                        <h2
+                            style={{
+                                fontSize: typographicRatios.h2 + 'px',
+                                lineHeight: typographicRatios.h2 * 1.2 + 'px',
+                                margin: '20px 0'
+                            }}
+                        >
+                            {children}
+                        </h2>
+                    ),
+                    h3: ({ children }) => (
+                        <h3 style={{ fontSize: '25px' }}>{children}</h3>
+                    ),
+                    p: ({ children }) => (
+                        <p
+                            style={{
+                                fontSize: typographicRatios.p + 'px',
+                                lineHeight: typographicRatios.p * 1.2 + 'px',
+                                margin: '20px 0'
+                            }}
+                        >
+                            {children}
+                        </p>
+                    )
+                }) as any
+            }
+        />
+    )
 }
 
 export default function page({ params }: { params: { slug: string } }) {
