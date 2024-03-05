@@ -12,6 +12,17 @@ const meta = {
     url: 'https://novinnoori.com'
 }
 
+const links: { href: string; label: string }[] = [
+    {
+        href: '/',
+        label: 'Home'
+    },
+    {
+        href: '/blog',
+        label: 'Blog'
+    }
+]
+
 const RootLayout = ({ children }: PropsWithChildren<{}>) => {
     return (
         <html lang='en'>
@@ -31,14 +42,12 @@ const RootLayout = ({ children }: PropsWithChildren<{}>) => {
             <body>
                 <nav className='flex justify-between items-center p-8'>
                     <ul>
-                        <li>
-                            <Link href='/'>Home</Link>
-                        </li>
-                        <li>
-                            <Link href='/' as='/blog'>
-                                Blog
-                            </Link>
-                        </li>
+                        {links.map(link => (
+                            <li key={link.href} className='inline mr-4'>
+                                {/** @ts-ignore */}
+                                <Link href={link.href}>{link.label}</Link>
+                            </li>
+                        ))}
                     </ul>
                 </nav>
                 {children}

@@ -1,8 +1,7 @@
 import React from 'react'
 
-const inProgress = false
-// I am a Software Designer / Engineer based in Tempe, AZ.
-// Currently I'm working at ui.dev helping folks level up with JavaScript.
+const inProgress = true
+
 const Page = () => {
     return inProgress ? (
         <div className='h-screen flex justify-center items-center px-8'>
