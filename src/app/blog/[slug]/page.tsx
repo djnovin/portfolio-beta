@@ -28,6 +28,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
     }
 
     return (
+        /* @ts-ignore */
         <MDXRemote
             source={source}
             components={useMDXComponents({
@@ -113,7 +114,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                                 style={solarizedlight}
                                 wrapLines={true}
                             >
-                                {codeString}
+                                {codeString?.toString() || ''}
                             </SyntaxHighlighter>
                         </div>
                     )
