@@ -220,8 +220,8 @@ export default function page({ params }: { params: { slug: string } }) {
                     role='description'
                 >
                     If you enjoyed this article, consider subscribing to my
-                    newsletter. I'll send you an email when I publish a new
-                    article.
+                    newsletter. I will send you an email every time I publish a
+                    new article.
                 </p>
                 <label
                     className='mb-2'
