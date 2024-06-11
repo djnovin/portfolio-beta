@@ -8,7 +8,7 @@ import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from '@/components/CopyButton'
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { Metadata, ResolvingMetadata } from 'next'
 
 const getBlog = (slug: string) => {
     return BLOGS.find(blog => blog.slug === slug)
@@ -139,20 +139,30 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
     )
 }
 
-export async function generateMetaData({
-    params
-}: {
-    params: { slug: string }
-}) {
+type Props = {
+    params: {
+        slug: string
+    }
+}
+
+export async function generateMetadata(
+    { params }: Props,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
     const blog = getBlog(params.slug)
 
     return {
-        title: blog?.title,
+        applicationName: 'Novin Noori - Software Engineer Blog',
+        authors: [{ name: 'Novin Noori' }],
+        creator: 'Novin Noori',
         description: blog?.content.substring(0, 160) + ' ...',
+        generator: 'Novin Noori - Software Engineer Blog',
         keywords: blog?.tags.join(', '),
+        publisher: 'Novin Noori',
+        title: blog?.title,
         openGraph: {
-            title: blog?.title,
             description: blog?.content.substring(0, 160) + ' ...',
+            title: blog?.title,
             type: 'article',
             url: `https://novinnoori.com/blog/${blog?.slug}`
         }

@@ -1,8 +1,9 @@
 import React from 'react'
+import { Metadata } from 'next'
 
 const inProgress = true
 
-export const metadata = {
+export const metadata: Metadata = {
     title: 'Home Page - Novin Noori - Software Engineer',
     description: 'Welcome to my home page where I share my thoughts and ideas.',
     keywords:
