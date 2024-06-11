@@ -3,13 +3,7 @@ import '@/styles/global.css'
 import Link from 'next/link'
 import React, { PropsWithChildren } from 'react'
 import { Analytics } from '@vercel/analytics/react'
-
-type Meta = {
-    description: string
-    title: string
-    type: string
-    url: string
-}
+import { Links, Meta } from '../types'
 
 const meta: Meta = {
     description:
@@ -18,13 +12,6 @@ const meta: Meta = {
     type: 'website',
     url: 'https://novinnoori.com'
 }
-
-type Link = {
-    href: string
-    label: string
-}
-
-type Links = Link[]
 
 const links: Links = [
     {
