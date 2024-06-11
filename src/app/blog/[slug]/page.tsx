@@ -2,7 +2,7 @@ import React from 'react'
 import fs from 'fs'
 import path from 'path'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { blogs } from '@/constants/blog'
+import { BLOGS } from '@/constants/blog'
 import { useMDXComponents } from '../../../mdx-components'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -11,7 +11,7 @@ import { CopyButton } from '@/components/CopyButton'
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
 const getBlog = (slug: string) => {
-    return blogs.find(blog => blog.slug === slug)
+    return BLOGS.find(blog => blog.slug === slug)
 }
 
 const RemoteMdxPage = ({ slug }: { slug: string }) => {
