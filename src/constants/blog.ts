@@ -1,13 +1,17 @@
 type Categories = 'frontend' | 'backend' | 'fullstack'
 
-export const blogs: {
+type Blog = {
     id: number
     title: string
     slug: string
     date: string
     content: string
     category: Categories
-}[] = [
+}
+
+type Blogs = Blog[]
+
+export const blogs: Blogs = [
     {
         id: 1,
         title: '2024 Frontend Predictions',
