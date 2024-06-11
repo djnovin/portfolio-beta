@@ -119,13 +119,6 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                                             className=''
                                             textString={codeString?.toString()}
                                             aria-label='Copy code'
-                                            onClick={() => {
-                                                sendGTMEvent({
-                                                    event: 'click',
-                                                    category: 'copy',
-                                                    label: 'code'
-                                                })
-                                            }}
                                         />
                                     )}
                             </div>
