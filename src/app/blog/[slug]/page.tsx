@@ -55,7 +55,14 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                     </h2>
                 ),
                 h3: ({ children }) => (
-                    <h3 style={{ fontSize: '25px' }}>{children}</h3>
+                    <h3
+                        style={{
+                            fontSize: typographicRatios.h3 + 'px',
+                            lineHeight: typographicRatios.h3 * 1.2 + 'px'
+                        }}
+                    >
+                        {children}
+                    </h3>
                 ),
                 p: ({ children }) => (
                     <p
@@ -98,7 +105,9 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                     return (
                         <div className='relative my-10 border border-solid border-black'>
                             <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100'>
-                                <span className='pl-4'>{language}</span>
+                                <div>
+                                    <span className='pl-4'>{language}</span>
+                                </div>
                                 {codeString &&
                                     codeString.toString().length > 0 && (
                                         <CopyButton
