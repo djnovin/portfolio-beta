@@ -7,7 +7,7 @@ export const Breadcrumbs = ({
     crumbs: { label: string; path: string }[]
 }) => {
     return (
-        <div>
+        <nav aria-label='Breadcrumb'>
             {crumbs.map((crumb, index) => (
                 <span key={index}>
                     <Link
@@ -16,12 +16,15 @@ export const Breadcrumbs = ({
                         })}
                         // @ts-ignore
                         href={crumb.path}
+                        aria-current={
+                            index === crumbs.length - 1 ? 'page' : undefined
+                        }
                     >
                         {crumb.label}
                     </Link>
                     {index < crumbs.length - 1 && <span> / </span>}
                 </span>
             ))}
-        </div>
+        </nav>
     )
 }
