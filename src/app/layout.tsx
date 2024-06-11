@@ -4,7 +4,14 @@ import Link from 'next/link'
 import React, { PropsWithChildren } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 
-const meta = {
+type Meta = {
+    description: string
+    title: string
+    type: string
+    url: string
+}
+
+const meta: Meta = {
     description:
         'Novin Noori is a software engineer and a full-stack developer.',
     title: 'Novin Noori',
@@ -12,7 +19,14 @@ const meta = {
     url: 'https://novinnoori.com'
 }
 
-const links: { href: string; label: string }[] = [
+type Link = {
+    href: string
+    label: string
+}
+
+type Links = Link[]
+
+const links: Links = [
     {
         href: '/',
         label: 'Home'
