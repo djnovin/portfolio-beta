@@ -51,7 +51,7 @@ const RootLayout = ({ children }: PropsWithChildren<{}>) => {
                         ))}
                     </ul>
                 </nav>
-                {children}
+                <div className='max-w-4xl container mx-auto'>{children}</div>
                 <Analytics />
             </body>
         </html>
