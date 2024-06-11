@@ -161,6 +161,12 @@ export async function generateMetadata(
         keywords: blog?.tags.join(', '),
         publisher: 'Novin Noori',
         title: blog?.title,
+        twitter: {
+            card: 'summary',
+            site: '@djnovinnoori',
+            title: blog?.title,
+            description: blog?.content.substring(0, 160) + ' ...'
+        },
         openGraph: {
             description: blog?.content.substring(0, 160) + ' ...',
             title: blog?.title,
