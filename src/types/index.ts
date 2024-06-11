@@ -12,7 +12,25 @@ export type Meta = {
     url: string
 }
 
-export type Categories = 'frontend' | 'backend' | 'fullstack'
+export type Tag =
+    | 'frontend'
+    | 'backend'
+    | 'fullstack'
+    | 'rust'
+    | 'typescript'
+    | 'react'
+    | 'svelte'
+    | 'vue'
+    | 'angular'
+    | 'postgres'
+    | 'mysql'
+    | 'mongodb'
+    | 'nextjs'
+    | 'express'
+    | 'actix'
+    | 'axum'
+
+export type Tags = Tag[]
 
 export type Blog = {
     id: number
@@ -20,7 +38,7 @@ export type Blog = {
     slug: string
     date: string
     content: string
-    category: Categories
+    tags: Tags
 }
 
 export type Blogs = Blog[]

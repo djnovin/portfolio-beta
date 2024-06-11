@@ -1,6 +1,6 @@
 import { Blogs } from '../types'
 
-export const blogs: Blogs = [
+export const BLOGS: Blogs = [
     {
         id: 1,
         title: '2024 Frontend Predictions',
@@ -8,7 +8,7 @@ export const blogs: Blogs = [
         date: '2024-01-01',
         content:
             'I predict that in 2024, frontend development will be a lot easier than it is today.',
-        category: 'frontend'
+        tags: ['frontend']
     },
     {
         id: 2,
@@ -17,7 +17,7 @@ export const blogs: Blogs = [
         date: '2024-06-11',
         content:
             'Fetching data is easier than ever in Rust. Here is how you can do it.',
-        category: 'backend'
+        tags: ['backend', 'rust', 'typescript', 'react', 'nextjs']
     },
     {
         id: 3,
@@ -26,6 +26,6 @@ export const blogs: Blogs = [
         date: '2024-06-11',
         content:
             'Actix Web is a powerful web framework for Rust. Here is how you can get started with it.',
-        category: 'backend'
+        tags: ['backend', 'rust']
     }
 ]
