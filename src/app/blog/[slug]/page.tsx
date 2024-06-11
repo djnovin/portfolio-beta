@@ -9,6 +9,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from '@/components/CopyButton'
 import { Metadata, ResolvingMetadata } from 'next'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const getBlog = (slug: string) => {
     return BLOGS.find(blog => blog.slug === slug)
@@ -85,6 +86,13 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                         target='_blank'
                         rel='noopener noreferrer'
                         aria-label={`Link to ${href}`}
+                        onClick={() => {
+                            sendGTMEvent({
+                                event: 'click',
+                                category: 'outbound',
+                                label: href
+                            })
+                        }}
                     >
                         {children}
                     </a>
@@ -118,6 +126,13 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                                             className=''
                                             textString={codeString?.toString()}
                                             aria-label='Copy code'
+                                            onClick={() => {
+                                                sendGTMEvent({
+                                                    event: 'click',
+                                                    category: 'copy',
+                                                    label: 'code'
+                                                })
+                                            }}
                                         />
                                     )}
                             </div>
