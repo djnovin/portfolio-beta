@@ -18,5 +18,14 @@ export const blogs: Blogs = [
         content:
             'Fetching data is easier than ever in Rust. Here is how you can do it.',
         category: 'backend'
+    },
+    {
+        id: 3,
+        title: 'Zero to Hero with Actix Web',
+        slug: 'zero-to-hero-with-actix-web',
+        date: '2024-06-11',
+        content:
+            'Actix Web is a powerful web framework for Rust. Here is how you can get started with it.',
+        category: 'backend'
     }
 ]

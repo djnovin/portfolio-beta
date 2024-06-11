@@ -1,0 +1,373 @@
+# Zero to Hero with Actix Web
+
+## Introduction
+
+Actix Web is a powerful, pragmatic, and extremely fast web framework for Rust.
+It is built on top of Actix, a powerful actor framework for Rust. Actix Web is
+designed to be fast, modular, and easy to use. It is a great choice for building
+web applications, APIs, and microservices in Rust.
+
+In this tutorial, we will build a simple web application using Actix Web. We
+will cover the basics of Actix Web, including routing, request handling,
+middleware, and more. By the end of this tutorial, you will have a good
+understanding of how to build web applications with Actix Web.
+
+## Prerequisites
+
+Before we get started, make sure you have the following installed on your
+system:
+
+-   [Install Rust](https://www.rust-lang.org/tools/install)
+-   [Install Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)
+
+## Getting Started
+
+### Step 1: Create a New Actix Web Project
+
+To create a new Actix Web project, run the following command:
+
+```bash
+
+cargo new <project-name>
+cd <project-name>
+
+```
+
+### Step 2: Add Actix Web as a Dependency
+
+Add Actix Web as a dependency in your Cargo.toml file:
+
+```toml
+
+[dependencies]
+actix-web = "4.0.0"
+
+```
+
+### Step 3: Create a Basic Actix Web Application
+
+Create a new file called main.rs in the src directory and add the following
+code:
+
+```rust
+
+async fn hello() -> impl Responder {
+    HttpResponse::Ok().body("Hey there!")
+}
+
+```
+
+### Step 4: Add Scope and Routes to the Application
+
+Add a scope and routes to the application in the main.rs file:
+
+```rust
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new().service(
+            web::scope("/api/v1/")
+                // Define routes here
+        )
+    })
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
+}
+
+```
+
+### Step 5: Add Diesel ORM as a Dependency
+
+Add Diesel ORM as a dependency in your Cargo.toml file:
+
+```toml
+
+[dependencies]
+diesel = { version = "2.2.0", features = ["postgres"] }
+
+```
+
+If you feel more comfortable using a terminal to add the dependency, you can run
+the following command:
+
+```bash
+
+cargo add diesel --features postgres
+
+```
+
+### Step 6: Installing Diesel CLI
+
+To install the Diesel CLI, run the following command:
+
+```bash
+
+cargo install diesel_cli --no-default-features --features postgres
+
+```
+
+This step can often be a bit tricky, so I recommend checking the official Diesel
+documentation for more detailed instructions.
+[Diesel Documentation](https://diesel.rs/guides/getting-started)
+
+### Step 7: Configure Diesel
+
+First create a .env file in the root of your project and add the following:
+
+```bash
+
+echo DATABASE_URL=postgres://username:password@localhost/dbname > .env
+
+```
+
+Next, run the following command to configure Diesel:
+
+```bash
+
+diesel setup
+
+```
+
+### Step 8: Create a Migration File for the Database
+
+To create a migration file for the database, run the following command:
+
+```bash
+
+diesel migration generate create_todos
+
+```
+
+This will create a new migration file in the migrations directory. Open the
+migration file and add the following code:
+
+```sql
+
+CREATE TABLE todos (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    body TEXT NOT NULL,
+    completed BOOLEAN NOT NULL
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+```
+
+```sql
+
+DROP TABLE todos;
+
+```
+
+We can apply our new migrations to the database by running the following
+command:
+
+```bash
+
+diesel migration run
+
+```
+
+It is always a good idea to check if down.sql is correct. You can quicly confirm
+this by running:
+
+```bash
+
+diesel migration redo
+
+```
+
+Ensure that the migration was successful by checking the database. You can use a
+tool like pgAdmin or a command-line tool like psql to check the database.
+
+### Step 9: Write Some Code to Connect to the Database
+
+Create a new file called lib.rs in the src directory and add the following code:
+
+```rust
+
+use diesel::pg::PgConnection;
+use diesel::prelude::*;
+use dotenv::dotenv;
+use std::env;
+
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url)
+        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
+}
+
+```
+
+### Step 10: Create a Model for the Database Table
+
+Create a new file called models.rs in the src directory and add the following
+code:
+
+```rust
+
+use diesel::prelude::*;
+
+#[derive(Queryable, Selectable)]
+#[diesel(table_name = crate::schema::todos)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+
+pub struct Todo {
+    pub id: i32,
+    pub title: String,
+    pub body: String,
+    pub completed: bool,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+
+```
+
+### Step 11: Writing Queries
+
+Create a new file called queries.rs in the src directory and add the following
+code:
+
+```rust
+
+use diesel::prelude::*;
+use crate::models::Todo;
+
+pub fn get_todos(conn: &PgConnection) -> Vec<Todo> {
+    use crate::schema::todos::dsl::*;
+
+    todos.load::<Todo>(conn).expect("Error loading todos")
+}
+
+pub fn create_todo<'a>(
+    conn: &PgConnection,
+    title: &'a str,
+    body: &'a str,
+    completed: bool,
+) -> Todo {
+    use crate::schema::todos;
+
+    let new_todo = NewTodo {
+        title,
+        body,
+        completed,
+    };
+
+    diesel::insert_into(todos::table)
+        .values(&new_todo)
+        .get_result(conn)
+        .expect("Error saving new todo")
+}
+
+pub fn update_todo<'a>(
+    conn: &PgConnection,
+    id: i32,
+    title: &'a str,
+    body: &'a str,
+    completed: bool,
+) -> Todo {
+    use crate::schema::todos::dsl::*;
+
+    diesel::update(todos.find(id))
+        .set((title.eq(title), body.eq(body), completed.eq(completed)))
+        .get_result(conn)
+        .expect(&format!("Unable to find todo {}", id))
+}
+
+pub fn delete_todo(conn: &PgConnection, id: i32) -> bool {
+    use crate::schema::todos::dsl::*;
+
+    diesel::delete(todos.find(id))
+        .execute(conn)
+        .is_ok()
+}
+
+```
+
+### Step 12: Add Queries to Handlers in the Application
+
+Add queries to handlers in the application in the main.rs file:
+
+```rust
+
+async fn get_todos() -> impl Responder {
+    let conn = establish_connection();
+    let todos = queries::get_todos(&conn);
+
+    HttpResponse::Ok().json(todos)
+}
+
+async fn create_todo() -> impl Responder {
+    let conn = establish_connection();
+    let new_todo = queries::create_todo(&conn, "New Todo", "This is a new todo", false);
+
+    HttpResponse::Created().json(new_todo)
+}
+
+async fn update_todo() -> impl Responder {
+    let conn = establish_connection();
+    let updated_todo = queries::update_todo(&conn, 1, "Updated Todo", "This is an updated todo", true);
+
+    HttpResponse::Ok().json(updated_todo)
+}
+
+async fn delete_todo() -> impl Responder {
+    let conn = establish_connection();
+    let result = queries::delete_todo(&conn, 1);
+
+    if result {
+        HttpResponse::Ok().body("Todo deleted successfully")
+    } else {
+        HttpResponse::InternalServerError().body("Error deleting todo")
+    }
+}
+
+```
+
+### Step 13: Run the Application
+
+Add route handlers to the application in the main.rs file:
+
+```rust
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new().service(
+            web::scope("/api/v1/")
+                .route("/todo", web::get().to(get_todos))
+                .route("/todo", web::post().to(create_todo))
+                .route("/todo/{id}", web::get().to(get_todo))
+                .route("/todo/{id}", web::put().to(update_todo))
+                .route("/todo/{id}", web::delete().to(delete_todo)
+            )
+        )
+    })
+}
+
+
+```
+
+### Step 6: Run the Application
+
+Run the application using the following command:
+
+```bash
+
+cargo run
+
+```
+
+## Conclusion
+
+In this walkthrough, we covered the basics of building a web application with
+Actix Web. We learned how to create routes, handle requests, connect to a
+database, and perform CRUD operations. Actix Web is a powerful and flexible web
+framework that is well-suited for building web applications, APIs, and
+microservices in Rust. I hope this tutorial has given you a good understanding
+of how to get started with Actix Web and build web applications in Rust.
