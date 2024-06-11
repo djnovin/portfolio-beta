@@ -30,14 +30,6 @@ const RootLayout = ({ children }: PropsWithChildren<{}>) => {
                 />
             </head>
             <body>
-                <noscript>
-                    <iframe
-                        src='https://www.googletagmanager.com/ns.html?id=GTM-MPDNBLXX'
-                        height='0'
-                        width='0'
-                        style='display:none;visibility:hidden'
-                    ></iframe>
-                </noscript>
                 <nav className='flex justify-between items-center p-8'>
                     <ul>
                         {links.map(link => (
