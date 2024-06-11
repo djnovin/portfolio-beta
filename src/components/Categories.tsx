@@ -12,7 +12,7 @@ export const Category = (props: CategoryProps & ComponentProps<'div'>) => {
         <div
             {...rest}
             className={cn(
-                'px-2 py-1 rounded-full inline-block text-xs',
+                'px-2 py-1 rounded-full text-xs',
                 {
                     'bg-blue-200 text-blue-800 group-hover:bg-blue-300':
                         category === 'frontend',

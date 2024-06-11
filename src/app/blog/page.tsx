@@ -10,7 +10,7 @@ const page = () => {
             <h1 className='uppercase'>Blog In Progress</h1>
         </div>
     ) : (
-        <div className='h-screen px-8'>
+        <div className='h-full px-8 flex flex-col gap-y-4'>
             {blogs.map(blog => (
                 <Link
                     className='flex flex-row justify-between items-center gap-2 group'
@@ -18,10 +18,10 @@ const page = () => {
                     href={`/blog/${blog.slug}`}
                 >
                     <div className='flex flex-row items-center gap-2'>
-                        <Category category={blog.category} />
                         <span className='group-hover:underline'>
                             {blog.title}
                         </span>
+                        <Category category={blog.category} />
                     </div>
                     <span className='text-gray-500'>{blog.date}</span>
                 </Link>

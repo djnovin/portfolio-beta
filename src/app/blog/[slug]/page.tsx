@@ -5,6 +5,10 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { blogs } from '@/constants/blog'
 import { useMDXComponents } from '../../../mdx-components'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { CopyButton } from '@/components/CopyButton'
+import { vs } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
 const getBlog = (slug: string) => {
     return blogs.find(blog => blog.slug === slug)
@@ -17,9 +21,9 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
     )
 
     const typographicRatios = {
-        h1: 16 * 1.75 * 3,
-        h2: 16 * 1.75 * 2,
-        h3: 16 * 1.75 * 1,
+        h1: 16 * 1.2 * 3,
+        h2: 16 * 1.2 * 2,
+        h3: 16 * 1.2 * 1,
         p: 16
     }
 
@@ -62,7 +66,58 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                     >
                         {children}
                     </p>
-                )
+                ),
+                a: ({ children, href }) => (
+                    <a
+                        className='text-blue-500 hover:underline'
+                        href={href}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
+                        {children}
+                    </a>
+                ),
+                strong: ({ children }) => (
+                    <strong className='font-bold'>{children}</strong>
+                ),
+                ul: ({ children }) => (
+                    <ul className='list-disc list-inside'>{children}</ul>
+                ),
+                ol: ({ children }) => (
+                    <ol className='list-decimal'>{children}</ol>
+                ),
+                li: ({ children }) => <li>{children}</li>,
+                code: ({ className, children }) => {
+                    const language =
+                        className?.replace('language-', '') || 'typescript'
+                    const codeString = Array.isArray(children)
+                        ? children.join('')
+                        : children
+
+                    return (
+                        <div className='relative my-10 border border-solid border-black'>
+                            <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100'>
+                                <span className='pl-4'>{language}</span>
+                                {codeString &&
+                                    codeString.toString().length > 0 && (
+                                        <CopyButton
+                                            className=''
+                                            textString={codeString?.toString()}
+                                        />
+                                    )}
+                            </div>
+                            <div className='w-full border-t border-solid border-black'></div>
+                            <SyntaxHighlighter
+                                className='!my-0 !px-4 !bg-gray-50'
+                                language={language}
+                                style={solarizedlight}
+                                wrapLines={true}
+                            >
+                                {codeString}
+                            </SyntaxHighlighter>
+                        </div>
+                    )
+                }
             })}
         />
     )
