@@ -21,7 +21,7 @@ export const blogs: {
         id: 2,
         title: 'Using Rust in Next.js API Routes',
         slug: 'using-rust-in-nextjs-api-routes',
-        date: '2024-01-02',
+        date: '2024-06-11',
         content:
             'Fetching data is easier than ever in Rust. Here is how you can do it.',
         category: 'backend'
