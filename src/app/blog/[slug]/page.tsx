@@ -39,6 +39,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                             lineHeight: typographicRatios.h1 * 1.2 + 'px',
                             margin: '20px 0'
                         }}
+                        tabIndex={0}
                     >
                         {children}
                     </h1>
@@ -50,6 +51,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                             lineHeight: typographicRatios.h2 * 1.2 + 'px',
                             margin: '20px 0'
                         }}
+                        tabIndex={0}
                     >
                         {children}
                     </h2>
@@ -60,6 +62,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                             fontSize: typographicRatios.h3 + 'px',
                             lineHeight: typographicRatios.h3 * 1.2 + 'px'
                         }}
+                        tabIndex={0}
                     >
                         {children}
                     </h3>
@@ -81,6 +84,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                         href={href}
                         target='_blank'
                         rel='noopener noreferrer'
+                        aria-label={`Link to ${href}`}
                     >
                         {children}
                     </a>
@@ -113,6 +117,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                                         <CopyButton
                                             className=''
                                             textString={codeString?.toString()}
+                                            aria-label='Copy code'
                                         />
                                     )}
                             </div>
@@ -122,6 +127,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                                 language={language}
                                 style={solarizedlight}
                                 wrapLines={true}
+                                aria-label={`Code block in ${language}`}
                             >
                                 {codeString?.toString() || ''}
                             </SyntaxHighlighter>
@@ -145,6 +151,7 @@ export default function page({ params }: { params: { slug: string } }) {
                         { label: 'Blog', path: '/blog' },
                         { label: blog.title, path: `/blog/${blog.slug}` }
                     ]}
+                    aria-label='Breadcrumb navigation'
                 />
             )}
             <RemoteMdxPage slug={params.slug} />
