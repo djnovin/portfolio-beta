@@ -86,13 +86,6 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                         target='_blank'
                         rel='noopener noreferrer'
                         aria-label={`Link to ${href}`}
-                        onClick={() => {
-                            sendGTMEvent({
-                                event: 'click',
-                                category: 'outbound',
-                                label: href
-                            })
-                        }}
                     >
                         {children}
                     </a>

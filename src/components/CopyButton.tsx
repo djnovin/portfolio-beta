@@ -2,6 +2,7 @@
 
 import React, { ComponentProps } from 'react'
 import cn from 'classnames'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 export interface ButtonProps {
     textString: string
@@ -18,6 +19,16 @@ export const CopyButton = ({
             })
             .catch(err => {
                 console.error('Failed to copy text: ', err)
+            })
+            .finally(() => {
+                sendGTMEvent({
+                    action: 'click',
+                    category: 'button',
+                    event: 'copy',
+                    label: 'Copy Button',
+                    text: textString,
+                    url: window.location.href
+                })
             })
     }
 
