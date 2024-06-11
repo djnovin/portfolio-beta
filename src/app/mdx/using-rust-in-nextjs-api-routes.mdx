@@ -1,0 +1,226 @@
+# Using Rust in Next.js API Routes
+
+## Introduction
+
+Next.js is a popular React framework that is used to build server-rendered React
+applications. It's a powerful tool that allows you to build fast, scalable, and
+SEO-friendly web applications. One of the key features of Next.js is its support
+for API routes, which allow you to create serverless functions that can be used
+to handle requests from your frontend application.
+
+By default, Next.js API routes are written in JavaScript or TypeScript. However,
+it's also possible to write API routes in other languages
+[supported by Vercel](https://vercel.com/docs/runtimes#official-runtimes). In
+this tutorial, we'll show you how to use Rust to write API routes in a Next.js
+project.
+
+## Prerequisites
+
+Before you get started, you'll need to have the following installed on your
+machine:
+
+-   [Node.js](https://nodejs.org/en/)
+-   [npm](https://www.npmjs.com/) or [pnpm](https://pnpm.io/)
+-   [Rust](https://www.rust-lang.org/)
+-   [Vercel CLI](https://vercel.com/download)
+
+## Walkthrough
+
+### Step 1: Initialise a new Next.js project
+
+First, create a new Next.js project using the following command:
+
+```bash
+
+bunx create-next-app@latest <project-name>
+npx create-next-app@latest <project-name>
+pnpx create-next-app@latest <project-name>
+
+```
+
+For the purpose of this tutorial, we'll not discuss the details surrounding the
+various package managers. However, for brevity, we'll use npx as a placeholder
+for the package manager command as it is the most common package manager used in
+the JavaScript ecosystem.
+
+### Step 2: Install Vercel CLI via Package Manager
+
+Next, install the Vercel CLI using your preferred package manager:
+
+```bash
+
+bun add -D vercel
+npm install -D vercel
+pnpm add -D vercel
+
+```
+
+We are using the -D or --save-dev flag to tell the package manager to install
+Vercel CLI as a development dependency. This is because the Vercel CLI is only
+needed during the development and deployment process.
+
+For more information on the Vercel CLI, you can visit the
+[official documentation](https://vercel.com/docs/cli).
+
+### Step 3: Install Rust runtime for Vercel
+
+As of the time of writing, Vercel does not have native support for Rust.
+However, there is a community-supported runtime for Rust called vercel-rust. You
+can install it using your preferred package manager:
+
+```bash
+
+bun add -D vercel-rust
+npm install -D vercel-rust
+pnpm add -D vercel-rust
+
+```
+
+This article will complements the official documentation on how to use Rust with
+Vercel. I highly recommend you read the official documentation to get a better
+understanding of the nuances of configuring Rust with Vercel.
+
+For more information on the vercel-rust runtime, you can visit the official
+[GitHub repository](https://github.com/vercel-community/rust)
+
+### Step 4: Add and Configure vercel.json to use Rust runtime
+
+```bash
+
+touch vercel.json
+
+```
+
+Add the following configuration to the vercel.json file:
+
+```json
+{
+    "functions": {
+        "api/**/*.rs": {
+            "runtime": "vercel-rust@L<version>"
+        }
+    }
+}
+```
+
+Replace version with the latest version of the vercel-rust runtime. This should
+be the same version you installed in the previous step.
+
+It is important to note that the vercel.json file is used to configure your API
+routes and other settings for your Vercel project. You can read more about the
+vercel.json file in the
+[official documentation](https://vercel.com/docs/configuration).
+
+### Step 5: Install Rust
+
+If you don't already have Rust installed on your machine, you can install it by
+running the following command:
+
+```bash
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+```
+
+### Step 6: Create a new Rust project at the root of your Next.js project
+
+Cargo is the package manager for Rust. Similar to npm for Node.js, Cargo is used
+to manage Rust projects. You can create a new Rust project using the following
+command:
+
+```bash
+
+cargo new <project-name>
+
+```
+
+### Step 7: Add the following to your Cargo.toml
+
+There are a few dependencies that you need to add to your Cargo.toml file in
+order to use Rust with Vercel. Add the following to your Cargo.toml file:
+
+```toml
+
+[dependencies]
+tokio = { version = "1", features = ["macros"] }
+# Documentation: https://docs.rs/vercel_runtime/latest/vercel_runtime
+vercel_runtime = { version = "1.1.1" }
+
+# Add Rust API routes
+[[bin]]
+name = "hello"
+path = "api/hello.rs"
+
+```
+
+The tokio crate is an asynchronous runtime for Rust. It is used to handle the
+I/O operations in our API route. The vercel_runtime crate is a library that
+provides utilities for working with the Vercel runtime.
+
+The [[bin]] section is used to specify the binary targets for your Rust project.
+
+### Step 8: Create a new Rust file at the path specified in the Cargo.toml
+
+To create a new Rust file at the path specified in the Cargo.toml file, run the
+following command:
+
+```bash
+
+touch api/hello.rs
+
+```
+
+This is different to the default Next JS pages/api directory.
+
+Add the following code to the hello.rs file:
+
+```rust
+
+use vercel_runtime::{Request, Response};
+
+#[tokio::main]
+async fn main() {
+    vercel_runtime::run(|request: Request| async move {
+        Ok(Response::new().with_body("Hello, World!"))
+    });
+}
+
+```
+
+This code defines a simple API route that responds with "Hello, World!" when it
+receives a request.
+
+### Step 9: Deploy your Next.js project to Vercel
+
+To deploy your Next.js project to Vercel, run the following command in your Next
+JS project directory:
+
+```bash
+
+vercel
+
+```
+
+Follow the prompts to deploy your project to Vercel. Once the deployment is
+complete, you will receive a URL for your project.
+
+### Step 10: Visit your API route
+
+Test your API route by visiting the following URL in your browser or interacting
+with it using curl:
+
+```bash
+
+curl https://<project-name>.vercel.app/api/hello
+
+```
+
+You should see the response "Hello, World!" in your browser or terminal.
+
+## Conclusion
+
+In this tutorial, we showed you how to use Rust to write API routes in a Next.js
+project. By combining the power of Rust with the flexibility of Next.js, you can
+build fast, scalable, and reliable web applications. We hope this tutorial has
+been helpful, and we encourage you to explore the possibilities of using Rust
+with Next.js further.
