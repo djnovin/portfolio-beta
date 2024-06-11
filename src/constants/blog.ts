@@ -1,15 +1,4 @@
-type Categories = 'frontend' | 'backend' | 'fullstack'
-
-type Blog = {
-    id: number
-    title: string
-    slug: string
-    date: string
-    content: string
-    category: Categories
-}
-
-type Blogs = Blog[]
+import { Blogs } from '../types'
 
 export const blogs: Blogs = [
     {

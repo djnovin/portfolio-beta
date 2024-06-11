@@ -11,3 +11,16 @@ export type Meta = {
     type: string
     url: string
 }
+
+export type Categories = 'frontend' | 'backend' | 'fullstack'
+
+export type Blog = {
+    id: number
+    title: string
+    slug: string
+    date: string
+    content: string
+    category: Categories
+}
+
+export type Blogs = Blog[]
