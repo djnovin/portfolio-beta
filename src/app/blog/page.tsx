@@ -6,6 +6,21 @@ import { Tags } from '@/components/Tags'
 import { BLOGS } from '@/constants/blog'
 import { sortByDate } from '@/lib/index'
 
+export const metadata = {
+    title: 'Blog | Novin Noori - Software Engineer',
+    description:
+        'Welcome to my blog where I share my thoughts and ideas on software engineering, full-stack development, and more.',
+    keywords:
+        'software engineer, software designer, rust, react, next.js, node.js, graphql, postgresql, redis, typescript, javascript, html, css, blog, vercel, aws, azure, gcp',
+    openGraph: {
+        title: 'Blog | Novin Noori - Software Engineer',
+        description:
+            'Welcome to my blog where I share my thoughts and ideas on software engineering, full-stack development, and more.',
+        type: 'website',
+        url: 'https://novinnoori.com/blog'
+    }
+}
+
 const page = () => {
     const sortedBlogs = sortByDate([...BLOGS])
 

@@ -139,6 +139,26 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
     )
 }
 
+export async function generateMetaData({
+    params
+}: {
+    params: { slug: string }
+}) {
+    const blog = getBlog(params.slug)
+
+    return {
+        title: blog?.title,
+        description: blog?.content.substring(0, 160) + ' ...',
+        keywords: blog?.tags.join(', '),
+        openGraph: {
+            title: blog?.title,
+            description: blog?.content.substring(0, 160) + ' ...',
+            type: 'article',
+            url: `https://novinnoori.com/blog/${blog?.slug}`
+        }
+    }
+}
+
 export default function page({ params }: { params: { slug: string } }) {
     const blog = getBlog(params.slug)
 
