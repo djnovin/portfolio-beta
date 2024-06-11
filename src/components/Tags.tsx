@@ -9,6 +9,26 @@ interface CategoryProps {
 export const Tags = (props: CategoryProps & ComponentProps<'div'>) => {
     const { tags, ...rest } = props
 
+    const getAriaLabel = (tags: Tag) => {
+        if (tags.includes('frontend')) return 'Frontend'
+        if (tags.includes('typescript')) return 'TypeScript'
+        if (tags.includes('react')) return 'React'
+        if (tags.includes('svelte')) return 'Svelte'
+        if (tags.includes('postgres')) return 'PostgreSQL'
+        if (tags.includes('mysql')) return 'MySQL'
+        if (tags.includes('nextjs')) return 'Next.js'
+        if (tags.includes('axum')) return 'Axum'
+        if (tags.includes('backend')) return 'Backend'
+        if (tags.includes('express')) return 'Express'
+        if (tags.includes('mongodb')) return 'MongoDB'
+        if (tags.includes('vue')) return 'Vue.js'
+        if (tags.includes('fullstack')) return 'Fullstack'
+        if (tags.includes('actix')) return 'Actix'
+        if (tags.includes('angular')) return 'Angular'
+        if (tags.includes('rust')) return 'Rust'
+        return 'Tag'
+    }
+
     return (
         <div
             {...rest}
@@ -38,6 +58,7 @@ export const Tags = (props: CategoryProps & ComponentProps<'div'>) => {
                 },
                 props.className
             )}
+            aria-label={getAriaLabel(tags)}
         >
             {tags}
         </div>
