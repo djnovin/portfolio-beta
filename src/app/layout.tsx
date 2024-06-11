@@ -1,5 +1,6 @@
 import '@/styles/global.css'
 
+import { GoogleTagManager } from '@next/third-parties/google'
 import Link from 'next/link'
 import React, { PropsWithChildren } from 'react'
 import { Analytics } from '@vercel/analytics/react'
@@ -19,6 +20,7 @@ const links: Links = [
 const RootLayout = ({ children }: PropsWithChildren<{}>) => {
     return (
         <html lang='en'>
+            <GoogleTagManager gtmId='GTM-MPDNBLXX' />
             <head>
                 <title>Novin Noori</title>
                 <meta charSet='utf-8' />
@@ -28,6 +30,14 @@ const RootLayout = ({ children }: PropsWithChildren<{}>) => {
                 />
             </head>
             <body>
+                <noscript>
+                    <iframe
+                        src='https://www.googletagmanager.com/ns.html?id=GTM-MPDNBLXX'
+                        height='0'
+                        width='0'
+                        style='display:none;visibility:hidden'
+                    ></iframe>
+                </noscript>
                 <nav className='flex justify-between items-center p-8'>
                     <ul>
                         {links.map(link => (
