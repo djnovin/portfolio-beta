@@ -13,6 +13,24 @@ import { sendGTMEvent } from '@next/third-parties/google'
 import { auth } from 'auth'
 import { SignInButton } from '@/components/SignIn'
 import { prisma } from '../../../auth'
+import Image from 'next/image'
+
+type Comments = {
+    id: string
+    content: string
+    blogSlug: string
+    author: string
+}
+
+const getBlogComments = async (slug: string): Promise<Comments[]> => {
+    return (
+        (await prisma?.comment?.findMany({
+            where: {
+                blogSlug: slug
+            }
+        })) || []
+    )
+}
 
 const getBlog = (slug: string) => {
     return BLOGS.find(blog => blog.slug === slug)
@@ -23,16 +41,6 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
         path.join(process.cwd(), 'src/app/mdx', `${slug}.mdx`),
         'utf8'
     )
-
-    const getBlogComments = async (slug: string) => {
-        const comments = prisma.comment.findMany({
-            where: {
-                blogSlug: slug
-            }
-        })
-
-        return comments
-    }
 
     const typographicRatios = {
         h1: 16 * 1.2 * 3,
@@ -48,6 +56,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
             components={useMDXComponents({
                 h1: ({ children }) => (
                     <h1
+                        className='font-bold'
                         style={{
                             fontSize: typographicRatios.h1 + 'px',
                             lineHeight: typographicRatios.h1 * 1.2 + 'px',
@@ -60,6 +69,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                 ),
                 h2: ({ children }) => (
                     <h2
+                        className='font-bold'
                         style={{
                             fontSize: typographicRatios.h2 + 'px',
                             lineHeight: typographicRatios.h2 * 1.2 + 'px',
@@ -72,6 +82,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                 ),
                 h3: ({ children }) => (
                     <h3
+                        className='font-bold'
                         style={{
                             fontSize: typographicRatios.h3 + 'px',
                             lineHeight: typographicRatios.h3 * 1.2 + 'px'
@@ -192,6 +203,31 @@ export async function generateMetadata(
 export default async function page({ params }: { params: { slug: string } }) {
     const blog = getBlog(params.slug)
 
+    const comments = await getBlogComments(params.slug)
+
+    const handleComment = async (formData: FormData) => {
+        'use server'
+
+        const author = session?.user?.id
+
+        const comment = formData.get('comment')
+        const blogSlug = formData.get('blogSlug')
+
+        if (comment && blogSlug && author) {
+            await prisma.comment.create({
+                data: {
+                    content: comment,
+                    blogSlug: blogSlug,
+                    author: {
+                        connect: {
+                            id: author
+                        }
+                    }
+                }
+            })
+        }
+    }
+
     const handleSubscribe = async (formData: FormData) => {
         'use server'
 
@@ -215,20 +251,82 @@ export default async function page({ params }: { params: { slug: string } }) {
                 />
             )}
             <RemoteMdxPage slug={params.slug} />
-            <div className='mt-8'>{/* find comments for blog */}</div>
-            {session ? (
-                <input
-                    className='border border-solid border-black p-4 mt-8'
-                    type='text'
-                    placeholder='Comment'
-                    aria-label='Comment input'
-                />
-            ) : (
-                <>
-                    <p>Sign in to comment</p>
-                    <SignInButton />
-                </>
-            )}
+            <div className='mt-8'>
+                <h2
+                    className='text-2xl font-bold'
+                    aria-label='Comments title'
+                    role='heading'
+                >
+                    Comments ({comments.length})
+                </h2>
+                {comments.map(comment => {
+                    if (!comment) {
+                        return null
+                    }
+                    return (
+                        <div
+                            key={comment.id}
+                            className='border border-solid border-black p-4 mt-4 w-full'
+                            aria-label='Comment'
+                        >
+                            <div className='flex flex-row justify-between'>
+                                <p>{comment.author}</p>
+                                <p>{comment.content}</p>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+            <div>
+                {session ? (
+                    <form
+                        className='mt-8 w-full flex flex-row gap-4'
+                        action={handleSubscribe}
+                    >
+                        <div>
+                            <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
+                                <Image
+                                    fill={true}
+                                    alt='Profile picture'
+                                    objectFit='cover'
+                                    objectPosition='center'
+                                    src={session?.user?.image || ''}
+                                    priority={false}
+                                    quality={75}
+                                />
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-y-1 w-full'>
+                            <input
+                                className='border border-solid border-black p-4 rounded-none'
+                                type='text'
+                                placeholder='Comment'
+                                aria-label='Comment input'
+                                name='comment'
+                            />
+                            <button
+                                className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'
+                                type='submit'
+                            >
+                                {comments.length === 0
+                                    ? 'Be the first to comment'
+                                    : 'Comment'}
+                            </button>
+                        </div>
+                    </form>
+                ) : (
+                    <div className='mt-4 mb-10'>
+                        <p
+                            className='mb-4'
+                            aria-label='Comment description'
+                            role='description'
+                        >
+                            If you want to comment, please sign in first.
+                        </p>
+                        <SignInButton />
+                    </div>
+                )}
+            </div>
             <form
                 className='border border-solid border-black p-4 mt-8 flex flex-col'
                 action={handleSubscribe}
