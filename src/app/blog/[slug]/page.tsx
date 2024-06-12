@@ -11,6 +11,8 @@ import { CopyButton } from '@/components/CopyButton'
 import { Metadata, ResolvingMetadata } from 'next'
 import { sendGTMEvent } from '@next/third-parties/google'
 import { auth } from 'auth'
+import { SignInButton } from '@/components/SignIn'
+import { prisma } from '../../../auth'
 
 const getBlog = (slug: string) => {
     return BLOGS.find(blog => blog.slug === slug)
@@ -21,6 +23,16 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
         path.join(process.cwd(), 'src/app/mdx', `${slug}.mdx`),
         'utf8'
     )
+
+    const getBlogComments = async (slug: string) => {
+        const comments = prisma.comment.findMany({
+            where: {
+                blogSlug: slug
+            }
+        })
+
+        return comments
+    }
 
     const typographicRatios = {
         h1: 16 * 1.2 * 3,
@@ -203,6 +215,20 @@ export default async function page({ params }: { params: { slug: string } }) {
                 />
             )}
             <RemoteMdxPage slug={params.slug} />
+            <div className='mt-8'>{/* find comments for blog */}</div>
+            {session ? (
+                <input
+                    className='border border-solid border-black p-4 mt-8'
+                    type='text'
+                    placeholder='Comment'
+                    aria-label='Comment input'
+                />
+            ) : (
+                <>
+                    <p>Sign in to comment</p>
+                    <SignInButton />
+                </>
+            )}
             <form
                 className='border border-solid border-black p-4 mt-8 flex flex-col'
                 action={handleSubscribe}
