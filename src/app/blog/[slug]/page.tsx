@@ -321,7 +321,9 @@ export default async function page({ params }: { params: { slug: string } }) {
                             <div className='flex flex-col gap-y-2'>
                                 <div className='flex flex-row gap-x-1'>
                                     <p className='font-semibold'>
-                                        {comment.author.name}
+                                        {session?.user?.id === comment.authorId
+                                            ? 'You'
+                                            : comment.author.name}
                                     </p>
                                     <p
                                         className={cn('text-gray-500', {
