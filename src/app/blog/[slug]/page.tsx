@@ -16,6 +16,7 @@ import Image from 'next/image'
 import { revalidatePath } from 'next/cache'
 import cn from 'classnames'
 import { DeleteCommentButton } from '@/components/DeleteCommentButton'
+import { deleteComment } from 'actions/deleteComment'
 
 type Comments = {
     id: string
@@ -241,6 +242,22 @@ export default async function page({ params }: { params: { slug: string } }) {
         revalidatePath(`/blog/${params.slug}`)
     }
 
+    const handleDeleteComment = async (formData: FormData) => {
+        'use server'
+
+        const commentId = formData.get('commentId') as string
+
+        if (commentId) {
+            await prisma.comment.delete({
+                where: {
+                    id: commentId
+                }
+            })
+        }
+
+        revalidatePath(`/blog/${params.slug}`)
+    }
+
     const handleSubscribe = async (formData: FormData) => {
         'use server'
 
@@ -316,12 +333,14 @@ export default async function page({ params }: { params: { slug: string } }) {
                                         {comment.createdAt.toLocaleDateString()}
                                     </p>
                                     {session?.user?.id === comment.authorId && (
-                                        <DeleteCommentButton
-                                            comment={{ id: comment.id }}
-                                            params={{
-                                                slug: params.slug
-                                            }}
-                                        />
+                                        <form action={handleDeleteComment}>
+                                            <button
+                                                className='text-blue-500 bg-none border-none hover:underline focus:underline active:underline cursor-pointer font-light transition-all duration-200 ease-in-out p-0 m-0'
+                                                type='submit'
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
                                     )}
                                 </div>
                                 <div className='' aria-label='Comment body'>
