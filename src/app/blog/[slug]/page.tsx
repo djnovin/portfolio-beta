@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import fs from 'fs'
 import path from 'path'
 import { MDXRemote } from 'next-mdx-remote/rsc'
@@ -17,6 +17,8 @@ import { revalidatePath } from 'next/cache'
 import cn from 'classnames'
 import { DeleteCommentButton } from '@/components/DeleteCommentButton'
 import { deleteComment } from 'actions/deleteComment'
+import { Blog, Blogs } from '@/types/index'
+import Link from 'next/link'
 
 type Comments = {
     id: string
@@ -26,6 +28,35 @@ type Comments = {
     authorId: string
     createdAt: string
     updatedAt: string
+}
+
+const getAdjacentPosts = (currentPostSlug: string, allPosts: Blogs) => {
+    const currentIndex = allPosts.findIndex(
+        post => post.slug === currentPostSlug
+    )
+    const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
+    const nextPost =
+        currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+    return { prevPost, nextPost }
+}
+
+const getSimilarPosts = (currentPostSlug: string, allPosts: Blogs): Blogs => {
+    const currentPost = allPosts.find(post => post.slug === currentPostSlug)
+    if (!currentPost) return []
+
+    const similarPosts = allPosts
+        .filter(post => post.slug !== currentPostSlug)
+        .map(post => ({
+            ...post,
+            tagMatchCount: post.tags.filter(tag =>
+                currentPost.tags.includes(tag)
+            ).length
+        }))
+        .filter(post => post.tagMatchCount > 0)
+        .sort((a, b) => b.tagMatchCount - a.tagMatchCount)
+        .slice(0, 3)
+
+    return similarPosts
 }
 
 const getBlogComments = async (slug: string) => {
@@ -213,6 +244,9 @@ export async function generateMetadata(
 
 export default async function page({ params }: { params: { slug: string } }) {
     const blog = getBlog(params.slug)
+    const similarPosts = getSimilarPosts(params.slug, BLOGS)
+
+    const { prevPost, nextPost } = getAdjacentPosts(params.slug, BLOGS)
 
     const comments = await getBlogComments(params.slug)
 
@@ -440,6 +474,63 @@ export default async function page({ params }: { params: { slug: string } }) {
                     Subscribe
                 </button>
             </form>
+
+            <div className='flex flex-row gap-x-4 mt-10 justify-between items-start'>
+                {prevPost && (
+                    <div className=''>
+                        <Link
+                            className=''
+                            href={`/blog/${prevPost.slug}`}
+                            aria-label={`Link to ${prevPost.title}`}
+                        >
+                            <h3 className='text-xl font-bold'>Previous Post</h3>
+                            <p>{prevPost.title}</p>
+                        </Link>
+                    </div>
+                )}
+
+                {nextPost && (
+                    <div className=''>
+                        <Link
+                            className=''
+                            href={`/blog/${nextPost.slug}`}
+                            aria-label={`Link to ${nextPost.title}`}
+                        >
+                            <h3 className='text-xl font-bold'>Next Post</h3>
+                            <p>{nextPost.title}</p>
+                        </Link>
+                    </div>
+                )}
+            </div>
+            <div>
+                <h2 className='text-2xl font-bold mt-8'>Related Posts</h2>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4'>
+                    {similarPosts.map(blog => {
+                        if (blog.slug === params.slug) {
+                            return null
+                        }
+
+                        return (
+                            <div
+                                key={blog.slug}
+                                className='border border-solid border-black p-4'
+                            >
+                                <h3 className='text-xl font-bold'>
+                                    {blog.title}
+                                </h3>
+                                <p>{blog.content.substring(0, 160)} ...</p>
+                                <a
+                                    className='text-blue-500 hover:underline'
+                                    href={`/blog/${blog.slug}`}
+                                    aria-label={`Link to ${blog.title}`}
+                                >
+                                    Read more
+                                </a>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
         </div>
     )
 }
