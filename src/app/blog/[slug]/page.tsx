@@ -22,14 +22,14 @@ type Comments = {
     author: string
 }
 
-const getBlogComments = async (slug: string): Promise<Comments[]> => {
-    return (
-        (await prisma?.comment?.findMany({
-            where: {
-                blogSlug: slug
-            }
-        })) || []
-    )
+const getBlogComments = async (slug: string) => {
+    const data = await prisma?.comment?.findMany({
+        where: {
+            blogSlug: slug
+        }
+    })
+
+    return data
 }
 
 const getBlog = (slug: string) => {
@@ -209,9 +209,9 @@ export default async function page({ params }: { params: { slug: string } }) {
         'use server'
 
         const author = session?.user?.id
+        const blogSlug = params.slug
 
         const comment = formData.get('comment')
-        const blogSlug = formData.get('blogSlug')
 
         if (comment && blogSlug && author) {
             await prisma.comment.create({
@@ -259,7 +259,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                 >
                     Comments ({comments.length})
                 </h2>
-                {comments.map(comment => {
+                {comments.map((comment: Comments) => {
                     if (!comment) {
                         return null
                     }
@@ -281,7 +281,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                 {session ? (
                     <form
                         className='mt-8 w-full flex flex-row gap-4'
-                        action={handleSubscribe}
+                        action={handleComment}
                     >
                         <div>
                             <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
