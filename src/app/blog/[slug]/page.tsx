@@ -9,26 +9,34 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from '@/components/CopyButton'
 import { Metadata, ResolvingMetadata } from 'next'
-import { sendGTMEvent } from '@next/third-parties/google'
 import { auth } from 'auth'
 import { SignInButton } from '@/components/SignIn'
 import { prisma } from '../../../auth'
 import Image from 'next/image'
 import { revalidatePath } from 'next/cache'
+import cn from 'classnames'
 
 type Comments = {
     id: string
     body: string
     blogSlug: string
     author: string
+    authorId: string
+    createdAt: string
+    updatedAt: string
 }
 
 const getBlogComments = async (slug: string) => {
     const data = await prisma?.comment?.findMany({
+        include: {
+            author: true
+        },
         where: {
             blogSlug: slug
         }
     })
+
+    console.log(data)
 
     return data
 }
@@ -263,26 +271,72 @@ export default async function page({ params }: { params: { slug: string } }) {
             )}
             <RemoteMdxPage slug={params.slug} />
             <div className='mt-8'>
-                <h2
+                <span
                     className='text-2xl font-bold'
                     aria-label='Comments title'
-                    role='heading'
                 >
                     Comments ({comments.length})
-                </h2>
-                {comments.map((comment: any) => {
+                </span>
+                {comments.map(comment => {
                     if (!comment) {
                         return null
                     }
                     return (
                         <div
                             key={comment.id}
-                            className='border border-solid border-black p-4 mt-4 w-full'
+                            className='flex flex-row gap-x-8 justify-start items-center mt-8'
                             aria-label='Comment'
                         >
-                            <div className='flex flex-row justify-between'>
-                                <p>{comment.author}</p>
-                                <p>{comment.body}</p>
+                            <div>
+                                <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
+                                    <Image
+                                        fill={true}
+                                        alt='Profile picture'
+                                        objectFit='cover'
+                                        objectPosition='center'
+                                        src={comment.author.image || ''}
+                                        priority={false}
+                                        quality={75}
+                                    />
+                                </div>
+                            </div>
+                            <div className='flex flex-col gap-y-2'>
+                                <div className='flex flex-row gap-x-1'>
+                                    <p className='font-semibold'>
+                                        {comment.author.name}
+                                    </p>
+                                    <p
+                                        className={cn('text-gray-500', {
+                                            'mr-4':
+                                                session?.user?.id ===
+                                                comment.authorId
+                                        })}
+                                    >
+                                        {comment.createdAt.toLocaleDateString()}
+                                    </p>
+                                    {session?.user?.id === comment.authorId && (
+                                        <button
+                                            className='text-blue-500 bg-none border-none hover:underline focus:underline active:underline cursor-pointer font-light transition-all duration-200 ease-in-out p-0 m-0'
+                                            onClick={() => {
+                                                prisma.comment.delete({
+                                                    where: {
+                                                        id: comment.id
+                                                    }
+                                                })
+                                                revalidatePath(
+                                                    `/blog/${params.slug}`
+                                                )
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+                                </div>
+                                <div className='' aria-label='Comment body'>
+                                    <p className='text-gray-700'>
+                                        {comment.body}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     )
