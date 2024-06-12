@@ -317,10 +317,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     </p>
                                     {session?.user?.id === comment.authorId && (
                                         <DeleteCommentButton
-                                            comment={{
-                                                id: comment.id
-                                            }}
-                                            prisma={prisma}
+                                            comment={{ id: comment.id }}
                                             params={{
                                                 slug: params.slug
                                             }}
