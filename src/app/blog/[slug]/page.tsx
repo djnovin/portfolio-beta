@@ -17,7 +17,7 @@ import Image from 'next/image'
 
 type Comments = {
     id: string
-    content: string
+    body: string
     blogSlug: string
     author: string
 }
@@ -271,7 +271,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                         >
                             <div className='flex flex-row justify-between'>
                                 <p>{comment.author}</p>
-                                <p>{comment.content}</p>
+                                <p>{comment.body}</p>
                             </div>
                         </div>
                     )
