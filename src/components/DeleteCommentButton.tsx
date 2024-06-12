@@ -1,9 +1,6 @@
 'use client'
 
-import { PrismaClient } from '@prisma/client'
 import { deleteComment } from 'actions/deleteComment'
-import { prisma } from 'auth'
-import { revalidatePath } from 'next/cache'
 import React, { ComponentProps } from 'react'
 
 interface DeleteCommentButtonProps {
