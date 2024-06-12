@@ -242,7 +242,7 @@ export default async function page({ params }: { params: { slug: string } }) {
             await prisma.newslettersubscription.create({
                 data: {
                     email: email,
-                    subscribed: true
+                    subscribed: subscribe === 'on' ? true : false
                 }
             })
         }
