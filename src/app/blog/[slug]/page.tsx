@@ -333,14 +333,21 @@ export default async function page({ params }: { params: { slug: string } }) {
                                         {comment.createdAt.toLocaleDateString()}
                                     </p>
                                     {session?.user?.id === comment.authorId && (
-                                        <form action={handleDeleteComment}>
-                                            <button
-                                                className='text-blue-500 bg-none border-none hover:underline focus:underline active:underline cursor-pointer font-light transition-all duration-200 ease-in-out p-0 m-0'
-                                                type='submit'
-                                            >
-                                                Delete
-                                            </button>
-                                        </form>
+                                        <button
+                                            className='text-blue-500 bg-none border-none hover:underline focus:underline active:underline cursor-pointer font-light transition-all duration-200 ease-in-out p-0 m-0'
+                                            onClick={() => {
+                                                deleteComment({
+                                                    comment: {
+                                                        id: comment.id
+                                                    },
+                                                    params: {
+                                                        slug: params.slug
+                                                    }
+                                                })
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
                                     )}
                                 </div>
                                 <div className='' aria-label='Comment body'>
