@@ -14,6 +14,7 @@ import { auth } from 'auth'
 import { SignInButton } from '@/components/SignIn'
 import { prisma } from '../../../auth'
 import Image from 'next/image'
+import { revalidatePath } from 'next/cache'
 
 type Comments = {
     id: string
@@ -208,6 +209,7 @@ export default async function page({ params }: { params: { slug: string } }) {
     const handleComment = async (formData: FormData) => {
         'use server'
 
+        const session = await auth()
         const author = session?.user?.id
         const blogSlug = params.slug
 
@@ -216,7 +218,7 @@ export default async function page({ params }: { params: { slug: string } }) {
         if (comment && blogSlug && author) {
             await prisma.comment.create({
                 data: {
-                    content: comment,
+                    body: comment,
                     blogSlug: blogSlug,
                     author: {
                         connect: {
@@ -226,6 +228,8 @@ export default async function page({ params }: { params: { slug: string } }) {
                 }
             })
         }
+
+        revalidatePath(`/blog/${params.slug}`)
     }
 
     const handleSubscribe = async (formData: FormData) => {
