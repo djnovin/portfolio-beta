@@ -306,6 +306,20 @@ export default async function page({ params }: { params: { slug: string } }) {
                 />
             )}
             <RemoteMdxPage slug={params.slug} />
+
+            <div className='my-20' aria-label='Helpful article feedback'>
+                <p className='text-center font-semibold text-lg'>
+                    Did you find this article helpful?
+                </p>
+                <form className='flex flex-row gap-x-4 justify-center mt-4'>
+                    <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
+                        Yes
+                    </button>
+                    <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
+                        No
+                    </button>
+                </form>
+            </div>
             <div className='mt-8'>
                 <span
                     className='text-2xl font-bold'
@@ -370,6 +384,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                     )
                 })}
             </div>
+
             <div>
                 {session ? (
                     <form
@@ -502,6 +517,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                     </div>
                 )}
             </div>
+
             <div>
                 <h2 className='text-2xl font-bold mt-8'>Related Posts</h2>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4'>
