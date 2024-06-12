@@ -15,7 +15,7 @@ interface DeleteCommentButtonProps {
 export const deleteComment = async (props: DeleteCommentButtonProps) => {
     const { id, params, inViewRoute = false } = props
 
-    prisma.comment.delete({
+    await prisma.comment.delete({
         where: {
             id: id
         }
