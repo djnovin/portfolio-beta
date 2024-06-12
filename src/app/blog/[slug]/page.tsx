@@ -213,7 +213,7 @@ export default async function page({ params }: { params: { slug: string } }) {
         const author = session?.user?.id
         const blogSlug = params.slug
 
-        const comment = formData.get('comment')
+        const comment = formData.get('comment') as string
 
         if (comment && blogSlug && author) {
             await prisma.comment.create({
@@ -235,12 +235,19 @@ export default async function page({ params }: { params: { slug: string } }) {
     const handleSubscribe = async (formData: FormData) => {
         'use server'
 
-        const email = formData.get('email')
-        const subscribe = formData.get('subscribe')
+        const email = formData.get('email') as string
+        const subscribe = formData.get('subscribe') as string
 
         if (email && subscribe) {
-            // send email to backend
+            await prisma.newslettersubscription.create({
+                data: {
+                    email: email,
+                    subscribed: true
+                }
+            })
         }
+
+        revalidatePath(`/blog/${params.slug}`)
     }
     const session = await auth()
     return (
@@ -332,20 +339,20 @@ export default async function page({ params }: { params: { slug: string } }) {
                 )}
             </div>
             <form
-                className='border border-solid border-black p-4 mt-8 flex flex-col'
                 action={handleSubscribe}
+                className='border border-solid border-black p-4 mt-8 flex flex-col'
             >
                 <h2
-                    className='text-2xl font-bold mb-4'
                     aria-label='Subscribe to newsletter title'
+                    className='text-2xl font-bold mb-4'
                     role='heading'
                 >
                     Subscribe
                 </h2>
 
                 <p
-                    className='mb-4'
                     aria-label='Subscribe to newsletter description'
+                    className='mb-4'
                     role='description'
                 >
                     If you enjoyed this article, consider subscribing to my
@@ -353,9 +360,9 @@ export default async function page({ params }: { params: { slug: string } }) {
                     new article.
                 </p>
                 <label
+                    aria-label='Email label'
                     className='mb-2'
                     htmlFor='email'
-                    aria-label='Email label'
                     role='label'
                 >
                     Email
