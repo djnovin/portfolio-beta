@@ -239,7 +239,7 @@ export default async function page({ params }: { params: { slug: string } }) {
         const subscribe = formData.get('subscribe') as string
 
         if (email && subscribe) {
-            await prisma.newslettersubscription.create({
+            await prisma.newsletterSubscription.create({
                 data: {
                     email: email,
                     subscribed: subscribe === 'on' ? true : false
