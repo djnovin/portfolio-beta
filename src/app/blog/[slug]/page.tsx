@@ -259,7 +259,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                 >
                     Comments ({comments.length})
                 </h2>
-                {comments.map((comment: Comments) => {
+                {comments.map((comment: any) => {
                     if (!comment) {
                         return null
                     }
