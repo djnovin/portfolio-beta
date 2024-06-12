@@ -5,9 +5,7 @@ import { usePathname } from 'next/navigation'
 import React, { ComponentProps } from 'react'
 
 interface DeleteCommentButtonProps {
-    comment: {
-        id: string
-    }
+    id: string
     params: {
         slug: string
     }
@@ -16,7 +14,7 @@ interface DeleteCommentButtonProps {
 export const DeleteCommentButton = (
     props: DeleteCommentButtonProps & ComponentProps<'button'>
 ) => {
-    const { comment, params } = props
+    const { id, params } = props
 
     const pathName = usePathname()
 
@@ -25,7 +23,7 @@ export const DeleteCommentButton = (
             className='text-blue-500 bg-none border-none hover:underline focus:underline active:underline cursor-pointer font-light transition-all duration-200 ease-in-out p-0 m-0'
             onClick={() => {
                 deleteComment({
-                    comment,
+                    id: id,
                     params,
                     inViewRoute:
                         pathName === `/blog/${params.slug}` ? true : false

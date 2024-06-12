@@ -242,22 +242,6 @@ export default async function page({ params }: { params: { slug: string } }) {
         revalidatePath(`/blog/${params.slug}`)
     }
 
-    const handleDeleteComment = async (formData: FormData) => {
-        'use server'
-
-        const commentId = formData.get('commentId') as string
-
-        if (commentId) {
-            await prisma.comment.delete({
-                where: {
-                    id: commentId
-                }
-            })
-        }
-
-        revalidatePath(`/blog/${params.slug}`)
-    }
-
     const handleSubscribe = async (formData: FormData) => {
         'use server'
 
@@ -336,10 +320,9 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     </p>
                                     {session?.user?.id === comment.authorId && (
                                         <DeleteCommentButton
-                                            comment={comment}
+                                            id={comment.id}
                                             params={params}
                                             aria-label='Delete comment button'
-                                            role='button'
                                         />
                                     )}
                                 </div>

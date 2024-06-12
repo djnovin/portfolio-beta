@@ -5,9 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 interface DeleteCommentButtonProps {
-    comment: {
-        id: string
-    }
+    id: string
     params: {
         slug: string
     }
@@ -15,10 +13,11 @@ interface DeleteCommentButtonProps {
 }
 
 export const deleteComment = async (props: DeleteCommentButtonProps) => {
-    const { comment, params, inViewRoute = false } = props
+    const { id, params, inViewRoute = false } = props
+
     prisma.comment.delete({
         where: {
-            id: comment.id
+            id: id
         }
     })
 
