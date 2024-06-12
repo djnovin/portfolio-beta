@@ -2,6 +2,7 @@
 
 import { prisma } from 'auth'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 interface DeleteCommentButtonProps {
     comment: {
@@ -10,15 +11,20 @@ interface DeleteCommentButtonProps {
     params: {
         slug: string
     }
+    inViewRoute: boolean
 }
 
 export const deleteComment = async (props: DeleteCommentButtonProps) => {
-    const { comment, params } = props
+    const { comment, params, inViewRoute = false } = props
     prisma.comment.delete({
         where: {
             id: comment.id
         }
     })
 
-    revalidatePath(`/blog/${params.slug}`)
+    if (inViewRoute) {
+        redirect(`/blog/${params.slug}`)
+    } else {
+        revalidatePath(`/blog/${params.slug}`)
+    }
 }
