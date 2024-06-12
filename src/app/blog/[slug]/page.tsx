@@ -10,6 +10,7 @@ import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { CopyButton } from '@/components/CopyButton'
 import { Metadata, ResolvingMetadata } from 'next'
 import { sendGTMEvent } from '@next/third-parties/google'
+import { auth } from 'auth'
 
 const getBlog = (slug: string) => {
     return BLOGS.find(blog => blog.slug === slug)
@@ -176,7 +177,7 @@ export async function generateMetadata(
     }
 }
 
-export default function page({ params }: { params: { slug: string } }) {
+export default async function page({ params }: { params: { slug: string } }) {
     const blog = getBlog(params.slug)
 
     const handleSubscribe = async (formData: FormData) => {
@@ -189,7 +190,7 @@ export default function page({ params }: { params: { slug: string } }) {
             // send email to backend
         }
     }
-
+    const session = await auth()
     return (
         <div className='px-8 pb-20'>
             {blog && (
