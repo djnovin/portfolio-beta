@@ -342,7 +342,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                         return (
                             <div
                                 key={comment.id}
-                                className='flex flex-row gap-x-8 justify-start items-center mt-8'
+                                className='flex flex-row gap-x-4 justify-start mt-8'
                                 aria-label='Comment'
                             >
                                 <div>
@@ -358,7 +358,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                         />
                                     </div>
                                 </div>
-                                <div className='flex flex-col gap-y-2'>
+                                <div className='flex flex-col gap-y-2 w-full'>
                                     <div className='flex flex-row gap-x-1'>
                                         <p className='font-semibold'>
                                             {session?.user?.id ===
@@ -456,8 +456,8 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                         : children
 
                                                 return (
-                                                    <div className='relative my-10 border border-solid border-black'>
-                                                        <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100'>
+                                                    <div className='relative my-10 w-full'>
+                                                        <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100 w-full'>
                                                             <div>
                                                                 <span className='pl-4'>
                                                                     {language}
@@ -474,13 +474,10 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                                     />
                                                                 )}
                                                         </div>
-                                                        <div className='w-full border-t border-solid border-black'></div>
+                                                        {/* <div className='w-full border-t border-solid border-black'></div> */}
                                                         <SyntaxHighlighter
-                                                            className='!my-0 !px-4 !bg-gray-50'
+                                                            className='!my-0 !px-4 !bg-gray-50 w-full'
                                                             language={language}
-                                                            style={
-                                                                solarizedlight
-                                                            }
                                                             wrapLines={true}
                                                             aria-label={`Code block in ${language}`}
                                                         >
