@@ -37,23 +37,7 @@ const ScrollToTopButton = () => {
             {isVisible && (
                 <button
                     onClick={scrollToTop}
-                    style={{
-                        zIndex: 1000,
-                        position: 'fixed',
-                        bottom: '2rem',
-                        right: '2rem',
-                        backgroundColor: '#3b82f6',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '50%',
-                        width: '3rem',
-                        height: '3rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'
-                    }}
+                    className='w-12 h-12 flex z-[1000] rounded-full justify-center items-center text-white bg-black fixed right-8 bottom-8 cursor-pointer shadow-sm border-none hover:scale-105 transition-all duration-150'
                 >
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
