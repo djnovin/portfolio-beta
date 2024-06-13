@@ -16,9 +16,9 @@ import Image from 'next/image'
 import { revalidatePath } from 'next/cache'
 import cn from 'classnames'
 import { DeleteCommentButton } from '@/components/DeleteCommentButton'
-import { deleteComment } from 'actions/deleteComment'
-import { Blog, Blogs } from '@/types/index'
+import { Blogs } from '@/types/index'
 import Link from 'next/link'
+import ProgressBar from '@/components/ProgressBar'
 
 type Comments = {
     id: string
@@ -295,47 +295,105 @@ export default async function page({ params }: { params: { slug: string } }) {
     }
     const session = await auth()
     return (
-        <div className='px-8 pb-20'>
-            {blog && (
-                <Breadcrumbs
-                    crumbs={[
-                        { label: 'Blog', path: '/blog' },
-                        { label: blog.title, path: `/blog/${blog.slug}` }
-                    ]}
-                    aria-label='Breadcrumb navigation'
-                />
-            )}
-            <RemoteMdxPage slug={params.slug} />
+        <>
+            <ProgressBar />
+            <div className='px-8 pb-20'>
+                {blog && (
+                    <Breadcrumbs
+                        crumbs={[
+                            { label: 'Blog', path: '/blog' },
+                            { label: blog.title, path: `/blog/${blog.slug}` }
+                        ]}
+                        aria-label='Breadcrumb navigation'
+                    />
+                )}
+                <RemoteMdxPage slug={params.slug} />
 
-            <div className='my-20' aria-label='Helpful article feedback'>
-                <p className='text-center font-semibold text-lg'>
-                    Did you find this article helpful?
-                </p>
-                <form className='flex flex-row gap-x-4 justify-center mt-4'>
-                    <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
-                        Yes
-                    </button>
-                    <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
-                        No
-                    </button>
-                </form>
-            </div>
-            <div className='mt-8'>
-                <span
-                    className='text-2xl font-bold'
-                    aria-label='Comments title'
-                >
-                    Comments ({comments.length})
-                </span>
-                {comments.map(comment => {
-                    if (!comment) {
-                        return null
-                    }
-                    return (
-                        <div
-                            key={comment.id}
-                            className='flex flex-row gap-x-8 justify-start items-center mt-8'
-                            aria-label='Comment'
+                <div className='my-20' aria-label='Helpful article feedback'>
+                    <p className='text-center font-semibold text-lg'>
+                        Did you find this article helpful?
+                    </p>
+                    <form className='flex flex-row gap-x-4 justify-center mt-4'>
+                        <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
+                            Yes
+                        </button>
+                        <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
+                            No
+                        </button>
+                    </form>
+                </div>
+                <div className='mt-8'>
+                    <span
+                        className='text-2xl font-bold'
+                        aria-label='Comments title'
+                    >
+                        Comments ({comments.length})
+                    </span>
+                    {comments.map(comment => {
+                        if (!comment) {
+                            return null
+                        }
+                        return (
+                            <div
+                                key={comment.id}
+                                className='flex flex-row gap-x-8 justify-start items-center mt-8'
+                                aria-label='Comment'
+                            >
+                                <div>
+                                    <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
+                                        <Image
+                                            fill={true}
+                                            alt='Profile picture'
+                                            objectFit='cover'
+                                            objectPosition='center'
+                                            src={comment.author.image || ''}
+                                            priority={false}
+                                            quality={75}
+                                        />
+                                    </div>
+                                </div>
+                                <div className='flex flex-col gap-y-2'>
+                                    <div className='flex flex-row gap-x-1'>
+                                        <p className='font-semibold'>
+                                            {session?.user?.id ===
+                                            comment.authorId
+                                                ? 'You'
+                                                : comment.author.name}
+                                        </p>
+                                        <p
+                                            className={cn('text-gray-500', {
+                                                'mr-4':
+                                                    session?.user?.id ===
+                                                    comment.authorId
+                                            })}
+                                        >
+                                            {comment.createdAt.toLocaleDateString()}
+                                        </p>
+                                        {session?.user?.id ===
+                                            comment.authorId && (
+                                            <DeleteCommentButton
+                                                id={comment.id}
+                                                params={params}
+                                                aria-label='Delete comment button'
+                                            />
+                                        )}
+                                    </div>
+                                    <div className='' aria-label='Comment body'>
+                                        <p className='text-gray-700'>
+                                            {comment.body}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+
+                <div>
+                    {session ? (
+                        <form
+                            className='mt-8 w-full flex flex-row gap-4'
+                            action={handleComment}
                         >
                             <div>
                                 <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
@@ -344,209 +402,160 @@ export default async function page({ params }: { params: { slug: string } }) {
                                         alt='Profile picture'
                                         objectFit='cover'
                                         objectPosition='center'
-                                        src={comment.author.image || ''}
+                                        src={session?.user?.image || ''}
                                         priority={false}
                                         quality={75}
                                     />
                                 </div>
                             </div>
-                            <div className='flex flex-col gap-y-2'>
-                                <div className='flex flex-row gap-x-1'>
-                                    <p className='font-semibold'>
-                                        {session?.user?.id === comment.authorId
-                                            ? 'You'
-                                            : comment.author.name}
-                                    </p>
-                                    <p
-                                        className={cn('text-gray-500', {
-                                            'mr-4':
-                                                session?.user?.id ===
-                                                comment.authorId
-                                        })}
-                                    >
-                                        {comment.createdAt.toLocaleDateString()}
-                                    </p>
-                                    {session?.user?.id === comment.authorId && (
-                                        <DeleteCommentButton
-                                            id={comment.id}
-                                            params={params}
-                                            aria-label='Delete comment button'
-                                        />
-                                    )}
-                                </div>
-                                <div className='' aria-label='Comment body'>
-                                    <p className='text-gray-700'>
-                                        {comment.body}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                })}
-            </div>
-
-            <div>
-                {session ? (
-                    <form
-                        className='mt-8 w-full flex flex-row gap-4'
-                        action={handleComment}
-                    >
-                        <div>
-                            <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
-                                <Image
-                                    fill={true}
-                                    alt='Profile picture'
-                                    objectFit='cover'
-                                    objectPosition='center'
-                                    src={session?.user?.image || ''}
-                                    priority={false}
-                                    quality={75}
+                            <div className='flex flex-col gap-y-1 w-full'>
+                                <input
+                                    className='border border-solid border-black p-4 rounded-none'
+                                    type='text'
+                                    placeholder='Comment'
+                                    aria-label='Comment input'
+                                    name='comment'
                                 />
+                                <button
+                                    className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'
+                                    type='submit'
+                                >
+                                    {comments.length === 0
+                                        ? 'Be the first to comment'
+                                        : 'Comment'}
+                                </button>
                             </div>
-                        </div>
-                        <div className='flex flex-col gap-y-1 w-full'>
-                            <input
-                                className='border border-solid border-black p-4 rounded-none'
-                                type='text'
-                                placeholder='Comment'
-                                aria-label='Comment input'
-                                name='comment'
-                            />
-                            <button
-                                className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'
-                                type='submit'
+                        </form>
+                    ) : (
+                        <div className='mt-4 mb-10'>
+                            <p
+                                className='mb-4'
+                                aria-label='Comment description'
+                                role='description'
                             >
-                                {comments.length === 0
-                                    ? 'Be the first to comment'
-                                    : 'Comment'}
-                            </button>
+                                If you want to comment, please sign in first.
+                            </p>
+                            <SignInButton />
                         </div>
-                    </form>
-                ) : (
-                    <div className='mt-4 mb-10'>
-                        <p
-                            className='mb-4'
-                            aria-label='Comment description'
-                            role='description'
-                        >
-                            If you want to comment, please sign in first.
-                        </p>
-                        <SignInButton />
-                    </div>
-                )}
-            </div>
-            <form
-                action={handleSubscribe}
-                className='border border-solid border-black p-4 mt-8 flex flex-col'
-            >
-                <h2
-                    aria-label='Subscribe to newsletter title'
-                    className='text-2xl font-bold mb-4'
-                    role='heading'
-                >
-                    Subscribe
-                </h2>
-
-                <p
-                    aria-label='Subscribe to newsletter description'
-                    className='mb-4'
-                    role='description'
-                >
-                    If you enjoyed this article, consider subscribing to my
-                    newsletter. I will send you an email every time I publish a
-                    new article.
-                </p>
-                <label
-                    aria-label='Email label'
-                    className='mb-2'
-                    htmlFor='email'
-                    role='label'
-                >
-                    Email
-                </label>
-                <input
-                    aria-label='Email input'
-                    className='mb-4 rounded-none border border-solid border-black py-2 px-4'
-                    name='email'
-                    placeholder='Email'
-                    role='textbox'
-                    type='email'
-                />
-                <div className='flex flex-row gap-x-2'>
-                    <input
-                        aria-label='Subscribe to newsletter checkbox'
-                        id='subscribe'
-                        name='subscribe'
-                        role='checkbox'
-                        type='checkbox'
-                    />
-                    <label htmlFor='subscribe'>Subscribe to newsletter</label>
+                    )}
                 </div>
-                <button
-                    className='bg-black text-white py-2 px-4 mt-4 rounded-none border border-solid border-black'
-                    type='submit'
+                <form
+                    action={handleSubscribe}
+                    className='border border-solid border-black p-4 mt-8 flex flex-col'
                 >
-                    Subscribe
-                </button>
-            </form>
+                    <h2
+                        aria-label='Subscribe to newsletter title'
+                        className='text-2xl font-bold mb-4'
+                        role='heading'
+                    >
+                        Subscribe
+                    </h2>
 
-            <div className='flex flex-row gap-x-4 mt-10 justify-between items-start'>
-                {prevPost && (
-                    <div className=''>
-                        <Link
-                            className=''
-                            href={`/blog/${prevPost.slug}`}
-                            aria-label={`Link to ${prevPost.title}`}
-                        >
-                            <h3 className='text-xl font-bold'>Previous Post</h3>
-                            <p>{prevPost.title}</p>
-                        </Link>
+                    <p
+                        aria-label='Subscribe to newsletter description'
+                        className='mb-4'
+                        role='description'
+                    >
+                        If you enjoyed this article, consider subscribing to my
+                        newsletter. I will send you an email every time I
+                        publish a new article.
+                    </p>
+                    <label
+                        aria-label='Email label'
+                        className='mb-2'
+                        htmlFor='email'
+                        role='label'
+                    >
+                        Email
+                    </label>
+                    <input
+                        aria-label='Email input'
+                        className='mb-4 rounded-none border border-solid border-black py-2 px-4'
+                        name='email'
+                        placeholder='Email'
+                        role='textbox'
+                        type='email'
+                    />
+                    <div className='flex flex-row gap-x-2'>
+                        <input
+                            aria-label='Subscribe to newsletter checkbox'
+                            id='subscribe'
+                            name='subscribe'
+                            role='checkbox'
+                            type='checkbox'
+                        />
+                        <label htmlFor='subscribe'>
+                            Subscribe to newsletter
+                        </label>
                     </div>
-                )}
+                    <button
+                        className='bg-black text-white py-2 px-4 mt-4 rounded-none border border-solid border-black'
+                        type='submit'
+                    >
+                        Subscribe
+                    </button>
+                </form>
 
-                {nextPost && (
-                    <div className=''>
-                        <Link
-                            className=''
-                            href={`/blog/${nextPost.slug}`}
-                            aria-label={`Link to ${nextPost.title}`}
-                        >
-                            <h3 className='text-xl font-bold'>Next Post</h3>
-                            <p>{nextPost.title}</p>
-                        </Link>
-                    </div>
-                )}
-            </div>
-
-            <div>
-                <h2 className='text-2xl font-bold mt-8'>Related Posts</h2>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4'>
-                    {similarPosts.map(blog => {
-                        if (blog.slug === params.slug) {
-                            return null
-                        }
-
-                        return (
-                            <div
-                                key={blog.slug}
-                                className='border border-solid border-black p-4'
+                <div className='flex flex-row gap-x-4 mt-10 justify-between items-start'>
+                    {prevPost && (
+                        <div className=''>
+                            <Link
+                                className=''
+                                href={`/blog/${prevPost.slug}`}
+                                aria-label={`Link to ${prevPost.title}`}
                             >
                                 <h3 className='text-xl font-bold'>
-                                    {blog.title}
+                                    Previous Post
                                 </h3>
-                                <p>{blog.content.substring(0, 160)} ...</p>
-                                <a
-                                    className='text-blue-500 hover:underline'
-                                    href={`/blog/${blog.slug}`}
-                                    aria-label={`Link to ${blog.title}`}
+                                <p>{prevPost.title}</p>
+                            </Link>
+                        </div>
+                    )}
+
+                    {nextPost && (
+                        <div className=''>
+                            <Link
+                                className=''
+                                href={`/blog/${nextPost.slug}`}
+                                aria-label={`Link to ${nextPost.title}`}
+                            >
+                                <h3 className='text-xl font-bold'>Next Post</h3>
+                                <p>{nextPost.title}</p>
+                            </Link>
+                        </div>
+                    )}
+                </div>
+
+                <div>
+                    <h2 className='text-2xl font-bold mt-8'>Related Posts</h2>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4'>
+                        {similarPosts.map(blog => {
+                            if (blog.slug === params.slug) {
+                                return null
+                            }
+
+                            return (
+                                <div
+                                    key={blog.slug}
+                                    className='border border-solid border-black p-4'
                                 >
-                                    Read more
-                                </a>
-                            </div>
-                        )
-                    })}
+                                    <h3 className='text-xl font-bold'>
+                                        {blog.title}
+                                    </h3>
+                                    <p>{blog.content.substring(0, 160)} ...</p>
+                                    <a
+                                        className='text-blue-500 hover:underline'
+                                        href={`/blog/${blog.slug}`}
+                                        aria-label={`Link to ${blog.title}`}
+                                    >
+                                        Read more
+                                    </a>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
