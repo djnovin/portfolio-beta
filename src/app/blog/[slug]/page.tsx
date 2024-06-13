@@ -387,6 +387,110 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     <ReactMarkdown
                                         remarkPlugins={[remarkGfm]}
                                         rehypePlugins={[rehypeRaw]}
+                                        components={{
+                                            h1: ({ children }) => (
+                                                <h1
+                                                    className='font-bold'
+                                                    tabIndex={0}
+                                                >
+                                                    {children}
+                                                </h1>
+                                            ),
+                                            h2: ({ children }) => (
+                                                <h2
+                                                    className='font-medium'
+                                                    tabIndex={0}
+                                                >
+                                                    {children}
+                                                </h2>
+                                            ),
+                                            h3: ({ children }) => (
+                                                <h3
+                                                    className='font-semibold'
+                                                    tabIndex={0}
+                                                >
+                                                    {children}
+                                                </h3>
+                                            ),
+                                            p: ({ children }) => (
+                                                <p>{children}</p>
+                                            ),
+                                            a: ({ children, href }) => (
+                                                <a
+                                                    className='text-blue-500 hover:underline'
+                                                    href={href}
+                                                    target='_blank'
+                                                    rel='noopener noreferrer'
+                                                    aria-label={`Link to ${href}`}
+                                                >
+                                                    {children}
+                                                </a>
+                                            ),
+                                            strong: ({ children }) => (
+                                                <strong className='font-bold'>
+                                                    {children}
+                                                </strong>
+                                            ),
+                                            ul: ({ children }) => (
+                                                <ul className='list-disc list-inside'>
+                                                    {children}
+                                                </ul>
+                                            ),
+                                            ol: ({ children }) => (
+                                                <ol className='list-decimal'>
+                                                    {children}
+                                                </ol>
+                                            ),
+                                            li: ({ children }) => (
+                                                <li>{children}</li>
+                                            ),
+                                            code: ({ className, children }) => {
+                                                const language =
+                                                    className?.replace(
+                                                        'language-',
+                                                        ''
+                                                    ) || 'typescript'
+                                                const codeString =
+                                                    Array.isArray(children)
+                                                        ? children.join('')
+                                                        : children
+
+                                                return (
+                                                    <div className='relative my-10 border border-solid border-black'>
+                                                        <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100'>
+                                                            <div>
+                                                                <span className='pl-4'>
+                                                                    {language}
+                                                                </span>
+                                                            </div>
+                                                            {codeString &&
+                                                                codeString.toString()
+                                                                    .length >
+                                                                    0 && (
+                                                                    <CopyButton
+                                                                        className=''
+                                                                        textString={codeString?.toString()}
+                                                                        aria-label='Copy code'
+                                                                    />
+                                                                )}
+                                                        </div>
+                                                        <div className='w-full border-t border-solid border-black'></div>
+                                                        <SyntaxHighlighter
+                                                            className='!my-0 !px-4 !bg-gray-50'
+                                                            language={language}
+                                                            style={
+                                                                solarizedlight
+                                                            }
+                                                            wrapLines={true}
+                                                            aria-label={`Code block in ${language}`}
+                                                        >
+                                                            {codeString?.toString() ||
+                                                                ''}
+                                                        </SyntaxHighlighter>
+                                                    </div>
+                                                )
+                                            }
+                                        }}
                                     >
                                         {comment.body}
                                     </ReactMarkdown>
