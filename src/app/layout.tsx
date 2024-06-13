@@ -34,7 +34,7 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                     content='width=device-width, initial-scale=1'
                 />
             </head>
-            <body>
+            <body className='selection:bg-[#d2fd78] scroll-smooth'>
                 <nav className='flex justify-between items-center p-8'>
                     <ul>
                         {links.map(link => (

@@ -18,13 +18,3 @@
     width: 0%;
     z-index: 1000;
 }
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    ::selection {
-        background: #d2fd78;
-    }
-}
