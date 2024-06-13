@@ -6,7 +6,7 @@ import { BlockMath, InlineMath } from 'react-katex'
 
 import 'katex/dist/katex.min.css'
 
-const renderLaTeX = (text: string) => {
+export const renderLaTeX = (text: string) => {
     const inlineMathPattern = /\$(.+?)\$/g
     const blockMathPattern = /\$\$(.+?)\$\$/g
 
@@ -23,7 +23,7 @@ const renderLaTeX = (text: string) => {
     return renderedText
 }
 
-const createMarkup = (output: string) => {
+export const createMarkup = (output: string) => {
     const latexProcessed = renderLaTeX(output)
     return { __html: latexProcessed }
 }
