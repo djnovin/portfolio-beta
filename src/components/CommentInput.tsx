@@ -37,6 +37,7 @@ const CommentInput: React.FC = () => {
             <textarea
                 className='border border-solid border-black p-4 rounded-none'
                 value={input}
+                name='comment'
                 onChange={handleInputChange}
                 placeholder='Write your comment here (supports Markdown and LaTeX)'
                 rows={10}
