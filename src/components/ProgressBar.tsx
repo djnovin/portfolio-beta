@@ -26,20 +26,20 @@ const ProgressBar = () => {
     return (
         <div
             style={{
-                position: 'fixed',
-                zIndex: 100,
-                top: 0,
+                backgroundColor: '#e0e0e0',
+                height: '4px',
                 left: 0,
+                position: 'fixed',
+                top: 0,
                 width: '100%',
-                height: '5px',
-                backgroundColor: '#e0e0e0'
+                zIndex: 100
             }}
         >
             <div
                 ref={progressBarRef}
                 style={{
+                    backgroundColor: '#d2fd78',
                     height: '100%',
-                    backgroundColor: '#3b82f6',
                     width: '0%'
                 }}
             />
