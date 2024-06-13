@@ -33,6 +33,8 @@ type Comments = {
     authorId: string
     createdAt: string
     updatedAt: string
+    parentId: string | null
+    replies: Comments[]
 }
 
 const getAdjacentPosts = (currentPostSlug: string, allPosts: Blogs) => {
@@ -329,6 +331,51 @@ export default async function page({ params }: { params: { slug: string } }) {
                     </form>
                 </div>
                 <div className='mt-8'>
+                    <div>
+                        {session ? (
+                            <form
+                                className='mt-8 w-full flex flex-row gap-4'
+                                action={handleComment}
+                            >
+                                <div>
+                                    <div className='relative rounded-full bg-gray-200 w-6 h-6 overflow-hidden'>
+                                        <Image
+                                            fill={true}
+                                            alt='Profile picture'
+                                            objectFit='cover'
+                                            objectPosition='center'
+                                            src={session?.user?.image || ''}
+                                            priority={false}
+                                            quality={75}
+                                        />
+                                    </div>
+                                </div>
+                                <div className='flex flex-col gap-y-1 w-full'>
+                                    <CommentInput />
+                                    <button
+                                        className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'
+                                        type='submit'
+                                    >
+                                        {comments.length === 0
+                                            ? 'Be the first to comment'
+                                            : 'Comment'}
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className='mt-4 mb-10'>
+                                <p
+                                    className='mb-4'
+                                    aria-label='Comment description'
+                                    role='description'
+                                >
+                                    If you want to comment, please sign in
+                                    first.
+                                </p>
+                                <SignInButton />
+                            </div>
+                        )}
+                    </div>
                     <span
                         className='text-2xl font-bold'
                         aria-label='Comments title'
@@ -346,7 +393,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                 aria-label='Comment'
                             >
                                 <div>
-                                    <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
+                                    <div className='relative rounded-full bg-gray-200 w-6 h-6 overflow-hidden'>
                                         <Image
                                             fill={true}
                                             alt='Profile picture'
@@ -358,20 +405,23 @@ export default async function page({ params }: { params: { slug: string } }) {
                                         />
                                     </div>
                                 </div>
-                                <div className='flex flex-col gap-y-2 w-full'>
-                                    <div className='flex flex-row gap-x-1'>
-                                        <p className='font-semibold'>
+                                <div className='flex flex-col w-full'>
+                                    <div className='flex flex-row gap-x-2 mb-2 items-center'>
+                                        <p className='font-semibold text-gray-800 text-sm'>
                                             {session?.user?.id ===
                                             comment.authorId
                                                 ? 'You'
                                                 : comment.author.name}
                                         </p>
                                         <p
-                                            className={cn('text-gray-500', {
-                                                'mr-4':
-                                                    session?.user?.id ===
-                                                    comment.authorId
-                                            })}
+                                            className={cn(
+                                                'text-gray-400 text-xs',
+                                                {
+                                                    'mr-4':
+                                                        session?.user?.id ===
+                                                        comment.authorId
+                                                }
+                                            )}
                                         >
                                             {comment.createdAt.toLocaleDateString()}
                                         </p>
@@ -456,27 +506,9 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                         : children
 
                                                 return (
-                                                    <div className='relative my-10 w-full'>
-                                                        <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100 w-full'>
-                                                            <div>
-                                                                <span className='pl-4'>
-                                                                    {language}
-                                                                </span>
-                                                            </div>
-                                                            {codeString &&
-                                                                codeString.toString()
-                                                                    .length >
-                                                                    0 && (
-                                                                    <CopyButton
-                                                                        className=''
-                                                                        textString={codeString?.toString()}
-                                                                        aria-label='Copy code'
-                                                                    />
-                                                                )}
-                                                        </div>
-                                                        {/* <div className='w-full border-t border-solid border-black'></div> */}
+                                                    <div className='relative my-4 w-full'>
                                                         <SyntaxHighlighter
-                                                            className='!my-0 !px-4 !bg-gray-50 w-full'
+                                                            className='!my-0 !px-4 !py-0 !bg-gray-50 w-full !text-sm'
                                                             language={language}
                                                             wrapLines={true}
                                                             aria-label={`Code block in ${language}`}
@@ -491,62 +523,74 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     >
                                         {comment.body}
                                     </ReactMarkdown>
+                                    <div className='flex flex-row'>
+                                        <button
+                                            className='py-1 px-4 flex flex-row justify-center items-center space-x-2 rounded-none hover:bg-gray-100'
+                                            aria-label={`Like comment`}
+                                        >
+                                            <svg
+                                                xmlns='http://www.w3.org/2000/svg'
+                                                fill='none'
+                                                viewBox='0 0 24 24'
+                                                strokeWidth={1.5}
+                                                stroke='currentColor'
+                                                className='size-6'
+                                            >
+                                                <path
+                                                    strokeLinecap='round'
+                                                    strokeLinejoin='round'
+                                                    d='M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z'
+                                                />
+                                            </svg>
+
+                                            <span className='text-sm font-medium'>
+                                                Like
+                                            </span>
+                                        </button>
+                                        <button
+                                            className='py-1 px-4 flex flex-row justify-center items-center space-x-2 rounded-none hover:bg-gray-100'
+                                            aria-label={`Reply to comment`}
+                                        >
+                                            <svg
+                                                xmlns='http://www.w3.org/2000/svg'
+                                                fill='none'
+                                                viewBox='0 0 24 24'
+                                                strokeWidth={1.5}
+                                                stroke='currentColor'
+                                                className='size-6'
+                                            >
+                                                <path
+                                                    strokeLinecap='round'
+                                                    strokeLinejoin='round'
+                                                    d='M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z'
+                                                />
+                                            </svg>
+
+                                            <span className='text-sm font-medium'>
+                                                Reply
+                                            </span>
+                                        </button>
+                                        <button>
+                                            <svg
+                                                xmlns='http://www.w3.org/2000/svg'
+                                                fill='none'
+                                                viewBox='0 0 24 24'
+                                                strokeWidth={1.5}
+                                                stroke='currentColor'
+                                                className='size-6'
+                                            >
+                                                <path
+                                                    strokeLinecap='round'
+                                                    strokeLinejoin='round'
+                                                    d='M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
+                                                />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )
                     })}
-                </div>
-
-                <div>
-                    {session ? (
-                        <form
-                            className='mt-8 w-full flex flex-row gap-4'
-                            action={handleComment}
-                        >
-                            <div>
-                                <div className='relative rounded-full bg-gray-200 w-12 h-12 overflow-hidden'>
-                                    <Image
-                                        fill={true}
-                                        alt='Profile picture'
-                                        objectFit='cover'
-                                        objectPosition='center'
-                                        src={session?.user?.image || ''}
-                                        priority={false}
-                                        quality={75}
-                                    />
-                                </div>
-                            </div>
-                            <div className='flex flex-col gap-y-1 w-full'>
-                                <CommentInput />
-                                {/* <input
-                                    className='border border-solid border-black p-4 rounded-none'
-                                    type='text'
-                                    placeholder='Comment'
-                                    aria-label='Comment input'
-                                    name='comment'
-                                /> */}
-                                <button
-                                    className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'
-                                    type='submit'
-                                >
-                                    {comments.length === 0
-                                        ? 'Be the first to comment'
-                                        : 'Comment'}
-                                </button>
-                            </div>
-                        </form>
-                    ) : (
-                        <div className='mt-4 mb-10'>
-                            <p
-                                className='mb-4'
-                                aria-label='Comment description'
-                                role='description'
-                            >
-                                If you want to comment, please sign in first.
-                            </p>
-                            <SignInButton />
-                        </div>
-                    )}
                 </div>
                 <form
                     action={handleSubscribe}
