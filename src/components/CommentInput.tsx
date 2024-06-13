@@ -2,6 +2,8 @@
 
 import React, { useState, useCallback, ComponentProps } from 'react'
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
 
 export const CommentInput = (props: ComponentProps<'textarea'>) => {
     const { placeholder, ...rest } = props
@@ -18,7 +20,12 @@ export const CommentInput = (props: ComponentProps<'textarea'>) => {
 
     return (
         <>
-            <ReactMarkdown>{input}</ReactMarkdown>
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+            >
+                {input}
+            </ReactMarkdown>
             <textarea
                 {...rest}
                 className='border border-solid border-black p-4 rounded-none'
