@@ -22,6 +22,8 @@ import ProgressBar from '@/components/ProgressBar'
 import ScrollToTopButton from '@/components/ScrollToTop'
 import { CommentInput } from '@/components/CommentInput'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 
 type Comments = {
     id: string
@@ -382,7 +384,10 @@ export default async function page({ params }: { params: { slug: string } }) {
                                             />
                                         )}
                                     </div>
-                                    <ReactMarkdown>
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        rehypePlugins={[rehypeRaw]}
+                                    >
                                         {comment.body}
                                     </ReactMarkdown>
                                 </div>
