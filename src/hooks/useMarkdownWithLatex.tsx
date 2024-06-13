@@ -9,7 +9,7 @@ const useMarkdownWithLatex = () => {
     const handleInputChange = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setInput(e.target.value)
-            const markdownOutput = marked(e.target.value)
+            const markdownOutput = marked.parse(e.target.value)
             const sanitizedOutput = DOMPurify.sanitize(markdownOutput)
             setOutput(sanitizedOutput)
         },
