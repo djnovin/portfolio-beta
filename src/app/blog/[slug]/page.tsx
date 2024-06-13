@@ -21,6 +21,7 @@ import Link from 'next/link'
 import ProgressBar from '@/components/ProgressBar'
 import ScrollToTopButton from '@/components/ScrollToTop'
 import { CommentInput } from '@/components/CommentInput'
+import ReactMarkdown from 'react-markdown'
 
 type Comments = {
     id: string
@@ -381,6 +382,9 @@ export default async function page({ params }: { params: { slug: string } }) {
                                             />
                                         )}
                                     </div>
+                                    <ReactMarkdown>
+                                        {comment.body}
+                                    </ReactMarkdown>
                                 </div>
                             </div>
                         )
