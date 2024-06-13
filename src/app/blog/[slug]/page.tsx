@@ -20,7 +20,7 @@ import { Blogs } from '@/types/index'
 import Link from 'next/link'
 import ProgressBar from '@/components/ProgressBar'
 import ScrollToTopButton from '@/components/ScrollToTop'
-import CommentInput, { createMarkup } from '@/components/CommentInput'
+import { CommentInput } from '@/components/CommentInput'
 
 type Comments = {
     id: string
@@ -380,16 +380,6 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                 aria-label='Delete comment button'
                                             />
                                         )}
-                                    </div>
-                                    <div className='' aria-label='Comment body'>
-                                        {/* <p className='text-gray-700'> */}
-                                        <div
-                                            aria-label='Comment body'
-                                            dangerouslySetInnerHTML={createMarkup(
-                                                comment.body
-                                            )}
-                                        />
-                                        {/* </p> */}
                                     </div>
                                 </div>
                             </div>

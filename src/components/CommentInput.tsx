@@ -1,51 +1,35 @@
 'use client'
 
-import React from 'react'
-import { useMarkdownWithLatex } from '@/hooks/useMarkdownWithLatex'
-import { BlockMath, InlineMath } from 'react-katex'
+import React, { useState, useCallback, ComponentProps } from 'react'
+import ReactMarkdown from 'react-markdown'
 
-import 'katex/dist/katex.min.css'
+export const CommentInput = (props: ComponentProps<'textarea'>) => {
+    const { placeholder, ...rest } = props
 
-export const renderLaTeX = (text: string) => {
-    const inlineMathPattern = /\$(.+?)\$/g
-    const blockMathPattern = /\$\$(.+?)\$\$/g
+    const [input, setInput] = useState<string>('')
 
-    // Render block LaTeX
-    let renderedText = text.replace(blockMathPattern, (_, tex) => {
-        return `<div class="katex-block"><BlockMath math={"${tex}"} /></div>`
-    })
-
-    // Render inline LaTeX
-    renderedText = renderedText.replace(inlineMathPattern, (_, tex) => {
-        return `<span class="katex-inline"><InlineMath math={"${tex}"} /></span>`
-    })
-
-    return renderedText
-}
-
-export const createMarkup = (output: string) => {
-    const latexProcessed = renderLaTeX(output)
-    return { __html: latexProcessed }
-}
-
-const CommentInput: React.FC = () => {
-    const { input, output, handleInputChange } = useMarkdownWithLatex()
+    const handleInputChange = useCallback(
+        (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            const newValue = e.target.value
+            setInput(newValue)
+        },
+        []
+    )
 
     return (
-        <div>
-            <div dangerouslySetInnerHTML={createMarkup(output)} />
+        <>
+            <ReactMarkdown>{input}</ReactMarkdown>
             <textarea
+                {...rest}
                 className='border border-solid border-black p-4 rounded-none'
                 value={input}
                 name='comment'
                 onChange={handleInputChange}
-                placeholder='Write your comment here (supports Markdown and LaTeX)'
+                placeholder='Write your comment here (supports Markdown)'
                 rows={10}
                 cols={50}
                 aria-label='Comment input'
             />
-        </div>
+        </>
     )
 }
-
-export default CommentInput
