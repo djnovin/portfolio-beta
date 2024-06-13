@@ -20,6 +20,7 @@ import { Blogs } from '@/types/index'
 import Link from 'next/link'
 import ProgressBar from '@/components/ProgressBar'
 import ScrollToTopButton from '@/components/ScrollToTop'
+import CommentInput from '@/components/CommentInput'
 
 type Comments = {
     id: string
@@ -411,13 +412,14 @@ export default async function page({ params }: { params: { slug: string } }) {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-y-1 w-full'>
-                                <input
+                                <CommentInput />
+                                {/* <input
                                     className='border border-solid border-black p-4 rounded-none'
                                     type='text'
                                     placeholder='Comment'
                                     aria-label='Comment input'
                                     name='comment'
-                                />
+                                /> */}
                                 <button
                                     className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'
                                     type='submit'
