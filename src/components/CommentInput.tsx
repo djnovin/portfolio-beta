@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import useMarkdownWithLatex from '@/hooks/useMarkdownWithLatex'
+import { useMarkdownWithLatex } from '@/hooks/useMarkdownWithLatex'
 import { BlockMath, InlineMath } from 'react-katex'
 
 import 'katex/dist/katex.min.css'
