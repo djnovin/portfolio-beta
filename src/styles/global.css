@@ -24,8 +24,6 @@ html {
 }
 
 body {
-    color: #aaa;
-
     ::selection {
         background: #d2fd78;
     }
