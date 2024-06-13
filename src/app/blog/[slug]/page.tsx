@@ -19,6 +19,7 @@ import { DeleteCommentButton } from '@/components/DeleteCommentButton'
 import { Blogs } from '@/types/index'
 import Link from 'next/link'
 import ProgressBar from '@/components/ProgressBar'
+import ScrollToTopButton from '@/components/ScrollToTop'
 
 type Comments = {
     id: string
@@ -297,6 +298,7 @@ export default async function page({ params }: { params: { slug: string } }) {
     return (
         <>
             <ProgressBar />
+            <ScrollToTopButton />
             <div className='px-8 pb-20'>
                 {blog && (
                     <Breadcrumbs
