@@ -112,7 +112,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                 ),
                 h2: ({ children }) => (
                     <h2
-                        className='font-bold'
+                        className='font-medium'
                         style={{
                             fontSize: typographicRatios.h2 + 'px',
                             lineHeight: typographicRatios.h2 * 1.2 + 'px',
@@ -125,7 +125,7 @@ const RemoteMdxPage = ({ slug }: { slug: string }) => {
                 ),
                 h3: ({ children }) => (
                     <h3
-                        className='font-bold'
+                        className='font-semibold'
                         style={{
                             fontSize: typographicRatios.h3 + 'px',
                             lineHeight: typographicRatios.h3 * 1.2 + 'px'
