@@ -26,6 +26,11 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
     return (
         <html lang='en'>
             <GoogleTagManager gtmId='GTM-MPDNBLXX' />
+            <script
+                async
+                crossOrigin='anonymous'
+                src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8952459697850931'
+            />
             <head>
                 <title>Novin Noori</title>
                 <meta charSet='utf-8' />
