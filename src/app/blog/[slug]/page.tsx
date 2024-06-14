@@ -26,6 +26,7 @@ import {
 } from '@/lib/index'
 import { RemoteMdxPage } from '@/components/MDXPage'
 import { TYPOGRAPHIC_RATIOS } from '@/constants/typography'
+import { AdBanner } from '@/components/AdBanner'
 
 export async function generateMetadata(
     { params }: Props,
@@ -114,6 +115,12 @@ export default async function page({ params }: { params: { slug: string } }) {
             <ProgressBar />
             <ScrollToTopButton />
             <div className='px-8 pb-20'>
+                <AdBanner
+                    dataAdFormat='auto'
+                    dataAdLayout='in-article'
+                    dataAdSlot='3651028178'
+                    dataFullWidthResponsive={true}
+                />
                 {blog && (
                     <Breadcrumbs
                         crumbs={[
