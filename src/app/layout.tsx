@@ -8,6 +8,7 @@ import { Links, Meta } from '../types'
 import { SignInButton } from '@/components/SignIn'
 import { auth } from 'auth'
 import { SignOutButton } from '@/components/SignOut'
+import { GoogleAdsense } from '@/components/Adsense'
 
 const links: Links = [
     {
@@ -26,14 +27,10 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
     return (
         <html lang='en'>
             <GoogleTagManager gtmId='GTM-MPDNBLXX' />
-            <script
-                async
-                crossOrigin='anonymous'
-                src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8952459697850931'
-            />
             <head>
                 <title>Novin Noori</title>
                 <meta charSet='utf-8' />
+                <GoogleAdsense pId='8952459697850931' />
                 <meta
                     name='viewport'
                     content='width=device-width, initial-scale=1'
@@ -52,8 +49,8 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                     {session ? <SignOutButton /> : <SignInButton />}
                 </nav>
                 <div className='max-w-4xl container mx-auto'>{children}</div>
-                <Analytics />
             </body>
+            <Analytics />
         </html>
     )
 }
