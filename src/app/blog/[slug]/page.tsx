@@ -1,23 +1,23 @@
 import React from 'react'
-import { BLOGS } from '@/constants/blog'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { Metadata, ResolvingMetadata } from 'next'
-import { auth } from 'auth'
-import { SignInButton } from '@/components/SignIn'
-import { prisma } from '../../../auth'
 import Image from 'next/image'
-import { revalidatePath } from 'next/cache'
-import cn from 'classnames'
-import { DeleteCommentButton } from '@/components/DeleteCommentButton'
-import { Blogs, Props } from '@/types/index'
 import Link from 'next/link'
 import ProgressBar from '@/components/ProgressBar'
-import ScrollToTopButton from '@/components/ScrollToTop'
-import { CommentInput } from '@/components/CommentInput'
 import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import ScrollToTopButton from '@/components/ScrollToTop'
+import cn from 'classnames'
 import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
+import { BLOGS } from '@/constants/blog'
+import { Blogs, Props } from '@/types/index'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
+import { CommentInput } from '@/components/CommentInput'
+import { DeleteCommentButton } from '@/components/DeleteCommentButton'
+import { Metadata, ResolvingMetadata } from 'next'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { SignInButton } from '@/components/SignIn'
+import { auth } from 'auth'
+import { prisma } from '../../../auth'
+import { revalidatePath } from 'next/cache'
 import {
     getAdjacentPosts,
     getBlog,
@@ -25,7 +25,7 @@ import {
     getSimilarPosts
 } from '@/lib/index'
 import { RemoteMdxPage } from '@/components/MDXPage'
-import { typographicRatios } from '@/constants/typography'
+import { TYPOGRAPHIC_RATIOS } from '@/constants/typography'
 
 export async function generateMetadata(
     { params }: Props,
@@ -123,7 +123,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                         aria-label='Breadcrumb navigation'
                     />
                 )}
-                <RemoteMdxPage slug={params.slug} styles={typographicRatios} />
+                <RemoteMdxPage slug={params.slug} styles={TYPOGRAPHIC_RATIOS} />
                 <div className='my-20' aria-label='Helpful article feedback'>
                     <p className='text-center font-semibold text-lg'>
                         Did you find this article helpful?

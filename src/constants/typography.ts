@@ -1,6 +1,6 @@
 import { TypographicRatios } from '@/types/index'
 
-export const typographicRatios: TypographicRatios = {
+export const TYPOGRAPHIC_RATIOS: TypographicRatios = {
     a: 16,
     blockquote: 16,
     code: 16,
