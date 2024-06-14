@@ -16,7 +16,7 @@ import Image from 'next/image'
 import { revalidatePath } from 'next/cache'
 import cn from 'classnames'
 import { DeleteCommentButton } from '@/components/DeleteCommentButton'
-import { Blogs } from '@/types/index'
+import { Blogs, Props } from '@/types/index'
 import Link from 'next/link'
 import ProgressBar from '@/components/ProgressBar'
 import ScrollToTopButton from '@/components/ScrollToTop'
@@ -24,200 +24,14 @@ import { CommentInput } from '@/components/CommentInput'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-
-type Comments = {
-    id: string
-    body: string
-    blogSlug: string
-    author: string
-    authorId: string
-    createdAt: string
-    updatedAt: string
-    parentId: string | null
-    replies: Comments[]
-}
-
-const getAdjacentPosts = (currentPostSlug: string, allPosts: Blogs) => {
-    const currentIndex = allPosts.findIndex(
-        post => post.slug === currentPostSlug
-    )
-    const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
-    const nextPost =
-        currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
-    return { prevPost, nextPost }
-}
-
-const getSimilarPosts = (currentPostSlug: string, allPosts: Blogs): Blogs => {
-    const currentPost = allPosts.find(post => post.slug === currentPostSlug)
-    if (!currentPost) return []
-
-    const similarPosts = allPosts
-        .filter(post => post.slug !== currentPostSlug)
-        .map(post => ({
-            ...post,
-            tagMatchCount: post.tags.filter(tag =>
-                currentPost.tags.includes(tag)
-            ).length
-        }))
-        .filter(post => post.tagMatchCount > 0)
-        .sort((a, b) => b.tagMatchCount - a.tagMatchCount)
-        .slice(0, 3)
-
-    return similarPosts
-}
-
-const getBlogComments = async (slug: string) => {
-    const data = await prisma?.comment?.findMany({
-        include: {
-            author: true
-        },
-        where: {
-            blogSlug: slug
-        }
-    })
-
-    console.log(data)
-
-    return data
-}
-
-const getBlog = (slug: string) => {
-    return BLOGS.find(blog => blog.slug === slug)
-}
-
-const RemoteMdxPage = ({ slug }: { slug: string }) => {
-    const source = fs.readFileSync(
-        path.join(process.cwd(), 'src/app/mdx', `${slug}.mdx`),
-        'utf8'
-    )
-
-    const typographicRatios = {
-        h1: 16 * 1.2 * 3,
-        h2: 16 * 1.2 * 2,
-        h3: 16 * 1.2 * 1,
-        p: 16
-    }
-
-    return (
-        /* @ts-ignore */
-        <MDXRemote
-            source={source}
-            components={useMDXComponents({
-                h1: ({ children }) => (
-                    <h1
-                        className='font-bold'
-                        style={{
-                            fontSize: typographicRatios.h1 + 'px',
-                            lineHeight: typographicRatios.h1 * 1.2 + 'px',
-                            margin: '20px 0'
-                        }}
-                        tabIndex={0}
-                    >
-                        {children}
-                    </h1>
-                ),
-                h2: ({ children }) => (
-                    <h2
-                        className='font-medium'
-                        style={{
-                            fontSize: typographicRatios.h2 + 'px',
-                            lineHeight: typographicRatios.h2 * 1.2 + 'px',
-                            margin: '20px 0'
-                        }}
-                        tabIndex={0}
-                    >
-                        {children}
-                    </h2>
-                ),
-                h3: ({ children }) => (
-                    <h3
-                        className='font-semibold'
-                        style={{
-                            fontSize: typographicRatios.h3 + 'px',
-                            lineHeight: typographicRatios.h3 * 1.2 + 'px'
-                        }}
-                        tabIndex={0}
-                    >
-                        {children}
-                    </h3>
-                ),
-                p: ({ children }) => (
-                    <p
-                        style={{
-                            fontSize: typographicRatios.p + 'px',
-                            lineHeight: typographicRatios.p * 1.2 + 'px',
-                            margin: '20px 0'
-                        }}
-                    >
-                        {children}
-                    </p>
-                ),
-                a: ({ children, href }) => (
-                    <a
-                        className='text-blue-500 hover:underline'
-                        href={href}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        aria-label={`Link to ${href}`}
-                    >
-                        {children}
-                    </a>
-                ),
-                strong: ({ children }) => (
-                    <strong className='font-bold'>{children}</strong>
-                ),
-                ul: ({ children }) => (
-                    <ul className='list-disc list-inside'>{children}</ul>
-                ),
-                ol: ({ children }) => (
-                    <ol className='list-decimal'>{children}</ol>
-                ),
-                li: ({ children }) => <li>{children}</li>,
-                code: ({ className, children }) => {
-                    const language =
-                        className?.replace('language-', '') || 'typescript'
-                    const codeString = Array.isArray(children)
-                        ? children.join('')
-                        : children
-
-                    return (
-                        <div className='relative my-10 border border-solid border-black'>
-                            <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100'>
-                                <div>
-                                    <span className='pl-4'>{language}</span>
-                                </div>
-                                {codeString &&
-                                    codeString.toString().length > 0 && (
-                                        <CopyButton
-                                            className=''
-                                            textString={codeString?.toString()}
-                                            aria-label='Copy code'
-                                        />
-                                    )}
-                            </div>
-                            <div className='w-full border-t border-solid border-black'></div>
-                            <SyntaxHighlighter
-                                className='!my-0 !px-4 !bg-gray-50'
-                                language={language}
-                                style={solarizedlight}
-                                wrapLines={true}
-                                aria-label={`Code block in ${language}`}
-                            >
-                                {codeString?.toString() || ''}
-                            </SyntaxHighlighter>
-                        </div>
-                    )
-                }
-            })}
-        />
-    )
-}
-
-type Props = {
-    params: {
-        slug: string
-    }
-}
+import {
+    getAdjacentPosts,
+    getBlog,
+    getBlogComments,
+    getSimilarPosts
+} from '@/lib/index'
+import { RemoteMdxPage } from '@/components/MDXPage'
+import { typographicRatios } from '@/constants/typography'
 
 export async function generateMetadata(
     { params }: Props,
@@ -315,8 +129,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                         aria-label='Breadcrumb navigation'
                     />
                 )}
-                <RemoteMdxPage slug={params.slug} />
-
+                <RemoteMdxPage slug={params.slug} styles={typographicRatios} />
                 <div className='my-20' aria-label='Helpful article feedback'>
                     <p className='text-center font-semibold text-lg'>
                         Did you find this article helpful?

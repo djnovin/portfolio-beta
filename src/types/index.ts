@@ -42,3 +42,38 @@ export type Blog = {
 }
 
 export type Blogs = Blog[]
+
+export type Comments = {
+    id: string
+    body: string
+    blogSlug: string
+    author: string
+    authorId: string
+    createdAt: string
+    updatedAt: string
+    parentId: string | null
+    replies: Comments[]
+}
+
+export type Props = {
+    params: {
+        slug: string
+    }
+}
+
+export type TypographyElement =
+    | 'a'
+    | 'blockquote'
+    | 'code'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'li'
+    | 'p'
+    | 'pre'
+    | 'strong'
+
+export type TypographicRatios = Record<TypographyElement, number>
