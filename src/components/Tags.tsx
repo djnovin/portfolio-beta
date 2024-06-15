@@ -2,7 +2,7 @@ import cn from 'classnames'
 import { ComponentProps } from 'react'
 import { Tag } from '@/types/index'
 
-interface CategoryProps {
+export interface CategoryProps {
     tags: Tag
 }
 

@@ -388,6 +388,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                         )
                     })}
                 </div>
+                <DidYouFindThisArticleHelpful />
                 <SubscribeForm params={params} />
                 <AdjacentPosts prevPost={prevPost} nextPost={nextPost} />
                 <RelatedPosts params={params} similarPosts={similarPosts} />
