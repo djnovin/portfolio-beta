@@ -1,3 +1,28 @@
 {
-    "extends": "next/core-web-vitals"
+    "extends": "next/core-web-vitals",
+    "rules": {
+        "indent": ["error", 4],
+        "no-console": ["warn"],
+        "no-fallthrough": "warn",
+        "no-undef": "error",
+        "no-unused-vars": "error",
+        "react/jsx-key": "warn",
+        "no-warning-comments": [
+            "warn",
+            { "terms": ["fixme"], "location": "start" }
+        ],
+        "max-lines": [
+            "warn",
+            { "max": 600, "skipBlankLines": true, "skipComments": true }
+        ],
+        "max-lines-per-function": [
+            "warn",
+            { "max": 70, "skipBlankLines": true, "skipComments": true }
+        ],
+        "arrow-body-style": "warn",
+        "func-style": ["warn", "expression", { "allowArrowFunctions": true }],
+        "import/no-cycle": "error",
+        "import/no-default-export": "warn",
+        "prefer-arrow-callback": "warn"
+    }
 }

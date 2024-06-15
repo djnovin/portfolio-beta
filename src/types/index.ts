@@ -77,3 +77,10 @@ export type TypographyElement =
     | 'strong'
 
 export type TypographicRatios = Record<TypographyElement, number>
+
+export type AdBannerProps = {
+    dataAdFormat: string
+    dataAdLayout: string
+    dataAdSlot: string
+    dataFullWidthResponsive: boolean
+}

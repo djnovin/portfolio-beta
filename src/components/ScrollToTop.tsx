@@ -7,7 +7,7 @@ import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(useGSAP)
 
-const ScrollToTopButton = () => {
+export const ScrollToTopButton = () => {
     const [isVisible, setIsVisible] = useState(false)
 
     const toggleVisibility = () => {
@@ -58,5 +58,3 @@ const ScrollToTopButton = () => {
         </div>
     )
 }
-
-export default ScrollToTopButton

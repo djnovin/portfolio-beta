@@ -11,22 +11,22 @@ interface DeleteCommentButtonProps {
     }
 }
 
-export const DeleteCommentButton = (
-    props: DeleteCommentButtonProps & ComponentProps<'button'>
-) => {
-    const { id, params } = props
-
+export const DeleteCommentButton = ({
+    id,
+    params,
+    ...rest
+}: DeleteCommentButtonProps & ComponentProps<'button'>) => {
     const pathName = usePathname()
 
     return (
         <button
+            {...rest}
             className='text-blue-500 bg-none border-none hover:underline focus:underline active:underline cursor-pointer font-light transition-all duration-200 ease-in-out p-0 m-0 text-xs'
             onClick={() => {
                 deleteComment({
-                    id: id,
+                    id,
                     params,
-                    inViewRoute:
-                        pathName === `/blog/${params.slug}` ? true : false
+                    inViewRoute: pathName === `/blog/${params.slug}`
                 })
             }}
         >

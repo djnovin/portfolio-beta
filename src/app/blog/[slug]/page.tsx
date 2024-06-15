@@ -1,22 +1,24 @@
-import React from 'react'
+/* eslint-disable max-lines-per-function */
 import Image from 'next/image'
 import Link from 'next/link'
-import ProgressBar from '@/components/ProgressBar'
+import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import ScrollToTopButton from '@/components/ScrollToTop'
 import cn from 'classnames'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import {
+    Breadcrumbs,
+    CommentInput,
+    DeleteCommentButton,
+    ProgressBar,
+    ScrollToTopButton,
+    SignInButton
+} from '@/components/index'
 import { BLOGS } from '@/constants/blog'
-import { Blogs, Props } from '@/types/index'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
-import { CommentInput } from '@/components/CommentInput'
-import { DeleteCommentButton } from '@/components/DeleteCommentButton'
-import { Metadata, ResolvingMetadata } from 'next'
+import { Metadata } from 'next'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { SignInButton } from '@/components/SignIn'
-import { auth } from 'auth'
-import { prisma } from '../../../auth'
+import { Blog, Props } from '@/types/index'
+import { auth, prisma } from 'auth'
 import { revalidatePath } from 'next/cache'
 import {
     getAdjacentPosts,
@@ -24,14 +26,12 @@ import {
     getBlogComments,
     getSimilarPosts
 } from '@/lib/index'
-import { RemoteMdxPage } from '@/components/MDXPage'
-import { TYPOGRAPHIC_RATIOS } from '@/constants/typography'
 import { AdBanner } from '@/components/AdBanner'
+import { RemoteMdxPage } from '@/components/MDXPage'
 
-export async function generateMetadata(
-    { params }: Props,
-    parent: ResolvingMetadata
-): Promise<Metadata> {
+export const generateMetadata = async ({
+    params
+}: Props): Promise<Metadata> => {
     const blog = getBlog(params.slug)
 
     return {
@@ -45,9 +45,9 @@ export async function generateMetadata(
         title: blog?.title,
         twitter: {
             card: 'summary',
+            description: blog?.content.substring(0, 160) + ' ...',
             site: '@djnovinnoori',
-            title: blog?.title,
-            description: blog?.content.substring(0, 160) + ' ...'
+            title: blog?.title
         },
         openGraph: {
             description: blog?.content.substring(0, 160) + ' ...',
@@ -70,46 +70,28 @@ export default async function page({ params }: { params: { slug: string } }) {
         'use server'
 
         const session = await auth()
+
         const author = session?.user?.id
         const blogSlug = params.slug
-
         const comment = formData.get('comment') as string
 
-        if (comment && blogSlug && author) {
-            await prisma.comment.create({
-                data: {
-                    body: comment,
-                    blogSlug: blogSlug,
-                    author: {
-                        connect: {
-                            id: author
-                        }
+        await prisma.comment.create({
+            data: {
+                author: {
+                    connect: {
+                        id: author
                     }
-                }
-            })
-        }
+                },
+                blogSlug: blogSlug,
+                body: comment
+            }
+        })
 
         revalidatePath(`/blog/${params.slug}`)
     }
 
-    const handleSubscribe = async (formData: FormData) => {
-        'use server'
-
-        const email = formData.get('email') as string
-        const subscribe = formData.get('subscribe') as string
-
-        if (email && subscribe) {
-            await prisma.newsletterSubscription.create({
-                data: {
-                    email: email,
-                    subscribed: subscribe === 'on' ? true : false
-                }
-            })
-        }
-
-        revalidatePath(`/blog/${params.slug}`)
-    }
     const session = await auth()
+
     return (
         <>
             <ProgressBar />
@@ -130,7 +112,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                         aria-label='Breadcrumb navigation'
                     />
                 )}
-                <RemoteMdxPage slug={params.slug} styles={TYPOGRAPHIC_RATIOS} />
+                <RemoteMdxPage slug={params.slug} />
                 <div className='my-20' aria-label='Helpful article feedback'>
                     <p className='text-center font-semibold text-lg'>
                         Did you find this article helpful?
@@ -406,123 +388,180 @@ export default async function page({ params }: { params: { slug: string } }) {
                         )
                     })}
                 </div>
-                <form
-                    action={handleSubscribe}
-                    className='border border-solid border-black p-4 mt-8 flex flex-col'
-                >
-                    <h2
-                        aria-label='Subscribe to newsletter title'
-                        className='text-2xl font-bold mb-4'
-                        role='heading'
-                    >
-                        Subscribe
-                    </h2>
-
-                    <p
-                        aria-label='Subscribe to newsletter description'
-                        className='mb-4'
-                        role='description'
-                    >
-                        If you enjoyed this article, consider subscribing to my
-                        newsletter. I will send you an email every time I
-                        publish a new article.
-                    </p>
-                    <label
-                        aria-label='Email label'
-                        className='mb-2'
-                        htmlFor='email'
-                        role='label'
-                    >
-                        Email
-                    </label>
-                    <input
-                        aria-label='Email input'
-                        className='mb-4 rounded-none border border-solid border-black py-2 px-4'
-                        name='email'
-                        placeholder='Email'
-                        role='textbox'
-                        type='email'
-                    />
-                    <div className='flex flex-row gap-x-2'>
-                        <input
-                            aria-label='Subscribe to newsletter checkbox'
-                            id='subscribe'
-                            name='subscribe'
-                            role='checkbox'
-                            type='checkbox'
-                        />
-                        <label htmlFor='subscribe'>
-                            Subscribe to newsletter
-                        </label>
-                    </div>
-                    <button
-                        className='bg-black text-white py-2 px-4 mt-4 rounded-none border border-solid border-black'
-                        type='submit'
-                    >
-                        Subscribe
-                    </button>
-                </form>
-
-                <div className='flex flex-row gap-x-4 mt-10 justify-between items-start'>
-                    {prevPost && (
-                        <div className=''>
-                            <Link
-                                className=''
-                                href={`/blog/${prevPost.slug}`}
-                                aria-label={`Link to ${prevPost.title}`}
-                            >
-                                <h3 className='text-xl font-bold'>
-                                    Previous Post
-                                </h3>
-                                <p>{prevPost.title}</p>
-                            </Link>
-                        </div>
-                    )}
-
-                    {nextPost && (
-                        <div className=''>
-                            <Link
-                                className=''
-                                href={`/blog/${nextPost.slug}`}
-                                aria-label={`Link to ${nextPost.title}`}
-                            >
-                                <h3 className='text-xl font-bold'>Next Post</h3>
-                                <p>{nextPost.title}</p>
-                            </Link>
-                        </div>
-                    )}
-                </div>
-
-                <div>
-                    <h2 className='text-2xl font-bold mt-8'>Related Posts</h2>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4'>
-                        {similarPosts.map(blog => {
-                            if (blog.slug === params.slug) {
-                                return null
-                            }
-
-                            return (
-                                <div
-                                    key={blog.slug}
-                                    className='border border-solid border-black p-4'
-                                >
-                                    <h3 className='text-xl font-bold'>
-                                        {blog.title}
-                                    </h3>
-                                    <p>{blog.content.substring(0, 160)} ...</p>
-                                    <a
-                                        className='text-blue-500 hover:underline'
-                                        href={`/blog/${blog.slug}`}
-                                        aria-label={`Link to ${blog.title}`}
-                                    >
-                                        Read more
-                                    </a>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
+                <SubscribeForm params={params} />
+                <AdjacentPosts prevPost={prevPost} nextPost={nextPost} />
+                <RelatedPosts params={params} similarPosts={similarPosts} />
             </div>
         </>
     )
 }
+
+export const DidYouFindThisArticleHelpful = () => (
+    <div className='my-20' aria-label='Helpful article feedback'>
+        <p className='text-center font-semibold text-lg'>
+            Did you find this article helpful?
+        </p>
+        <form className='flex flex-row gap-x-4 justify-center mt-4'>
+            <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
+                Yes
+            </button>
+            <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
+                No
+            </button>
+        </form>
+    </div>
+)
+
+export const SubscribeForm = (props: { params: { slug: string } }) => {
+    const { params } = props
+
+    const handleSubscribe = async (formData: FormData) => {
+        'use server'
+
+        const email = formData.get('email') as string
+        const subscribe = formData.get('subscribe') as string
+
+        if (!email) return null
+
+        if (!subscribe) return null
+
+        await prisma.newsletterSubscription.create({
+            data: {
+                email: email,
+                // terms and conditions
+                subscribed: subscribe === 'on' ? true : false
+            }
+        })
+
+        revalidatePath(`/blog/${params.slug}`)
+    }
+
+    return (
+        <form
+            action={handleSubscribe}
+            className='border border-solid border-black p-4 mt-8 flex flex-col'
+        >
+            <h2
+                aria-label='Subscribe to newsletter title'
+                className='text-2xl font-bold mb-4'
+                role='heading'
+            >
+                Subscribe
+            </h2>
+
+            <p
+                aria-label='Subscribe to newsletter description'
+                className='mb-4'
+                role='description'
+            >
+                If you enjoyed this article, consider subscribing to my
+                newsletter. I will send you an email every time I publish a new
+                article.
+            </p>
+            <label
+                aria-label='Email label'
+                className='mb-2'
+                htmlFor='email'
+                role='label'
+            >
+                Email
+            </label>
+            <input
+                aria-label='Email input'
+                className='mb-4 rounded-none border border-solid border-black py-2 px-4'
+                name='email'
+                placeholder='Email'
+                role='textbox'
+                type='email'
+            />
+            <div className='flex flex-row gap-x-2'>
+                <input
+                    aria-label='Subscribe to newsletter checkbox'
+                    id='subscribe'
+                    name='subscribe'
+                    role='checkbox'
+                    type='checkbox'
+                />
+                <label htmlFor='subscribe'>Subscribe to newsletter</label>
+            </div>
+            <button
+                className='bg-black text-white py-2 px-4 mt-4 rounded-none border border-solid border-black'
+                type='submit'
+            >
+                Subscribe
+            </button>
+        </form>
+    )
+}
+
+export const AdjacentPosts = ({
+    prevPost,
+    nextPost
+}: {
+    prevPost: Blog | null
+    nextPost: Blog | null
+}) => (
+    <div className='flex flex-row gap-x-4 mt-10 justify-between items-start'>
+        {prevPost && (
+            <div className=''>
+                <Link
+                    className=''
+                    href={`/blog/${prevPost.slug}`}
+                    aria-label={`Link to ${prevPost.title}`}
+                >
+                    <h3 className='text-xl font-bold'>Previous Post</h3>
+                    <p>{prevPost.title}</p>
+                </Link>
+            </div>
+        )}
+
+        {nextPost && (
+            <div className=''>
+                <Link
+                    className=''
+                    href={`/blog/${nextPost.slug}`}
+                    aria-label={`Link to ${nextPost.title}`}
+                >
+                    <h3 className='text-xl font-bold'>Next Post</h3>
+                    <p>{nextPost.title}</p>
+                </Link>
+            </div>
+        )}
+    </div>
+)
+
+export const RelatedPosts = ({
+    params,
+    similarPosts
+}: {
+    params: { slug: string }
+    similarPosts: Blog[]
+}) => (
+    <div>
+        <h2 className='text-2xl font-bold mt-8'>Related Posts</h2>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4'>
+            {similarPosts.map(blog => {
+                if (blog.slug === params.slug) {
+                    return null
+                }
+
+                return (
+                    <div
+                        key={blog.slug}
+                        className='border border-solid border-black p-4'
+                    >
+                        <h3 className='text-xl font-bold'>{blog.title}</h3>
+                        <p>{blog.content.substring(0, 160)} ...</p>
+                        <a
+                            className='text-blue-500 hover:underline'
+                            href={`/blog/${blog.slug}`}
+                            aria-label={`Link to ${blog.title}`}
+                        >
+                            Read more
+                        </a>
+                    </div>
+                )
+            })}
+        </div>
+    </div>
+)

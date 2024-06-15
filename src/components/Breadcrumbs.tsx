@@ -1,21 +1,27 @@
+import { ComponentProps } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
 
-export const Breadcrumbs = ({
-    crumbs
-}: {
+export interface BreadCrumbsProps {
     crumbs: { label: string; path: string }[]
-}) => {
+}
+
+export const Breadcrumbs = (
+    props: BreadCrumbsProps & Pick<ComponentProps<'nav'>, 'className'>
+) => {
+    const { crumbs, ...rest } = props
+
     return (
-        <nav aria-label='Breadcrumb'>
+        <nav {...rest} aria-label='Breadcrumb' className={cn(rest.className)}>
             {crumbs.map((crumb, index) => (
                 <span key={index}>
                     <Link
                         className={cn('hover:underline', {
                             underline: index >= crumbs.length - 1
                         })}
-                        // @ts-ignore
-                        href={crumb.path}
+                        href={{
+                            pathname: crumb.path
+                        }}
                         aria-current={
                             index === crumbs.length - 1 ? 'page' : undefined
                         }

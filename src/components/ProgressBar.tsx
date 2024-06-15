@@ -1,39 +1,36 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { ComponentProps, useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(useGSAP)
 
-const ProgressBar = () => {
-    const progressBarRef = useRef(null)
+export const ProgressBar = ({ ...props }: ComponentProps<'div'>) => {
+    const progressBarRef = useRef<HTMLDivElement>(null)
 
     useGSAP(() => {
         const handleScroll = () => {
             const totalScroll = document.documentElement.scrollTop
+
             const windowHeight =
                 document.documentElement.scrollHeight -
                 document.documentElement.clientHeight
+
             const scroll = totalScroll / windowHeight
+
             gsap.to(progressBarRef.current, { width: `${scroll * 100}%` })
         }
 
         window.addEventListener('scroll', handleScroll)
+
         return () => window.removeEventListener('scroll', handleScroll)
     }, [progressBarRef])
 
     return (
         <div
-            style={{
-                backgroundColor: '#e0e0e0',
-                height: '4px',
-                left: 0,
-                position: 'fixed',
-                top: 0,
-                width: '100%',
-                zIndex: 100
-            }}
+            className='left-0 top-0 w-full h-4 fixed bg-[#e0e0e0] z-100'
+            {...props}
         >
             <div
                 ref={progressBarRef}
@@ -46,5 +43,3 @@ const ProgressBar = () => {
         </div>
     )
 }
-
-export default ProgressBar

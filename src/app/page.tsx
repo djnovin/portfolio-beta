@@ -1,3 +1,5 @@
+/* eslint-disable import/no-default-export */
+
 import React from 'react'
 import { Metadata } from 'next'
 
@@ -17,8 +19,8 @@ export const metadata: Metadata = {
     }
 }
 
-const Page = () => {
-    return inProgress ? (
+const Page = () =>
+    inProgress ? (
         <div className='h-screen flex justify-center items-center px-8'>
             <h1 className='uppercase'>Currently Updating My Page</h1>
         </div>
@@ -43,6 +45,5 @@ const Page = () => {
             </ul>
         </div>
     )
-}
 
 export default Page

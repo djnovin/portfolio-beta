@@ -2,11 +2,10 @@ import { BLOGS } from '@/constants/blog'
 import { Blogs } from '@/types/index'
 import { prisma } from 'auth'
 
-export const sortByDate = (blogs: Blogs) => {
-    return blogs.sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-    })
-}
+export const sortByDate = (blogs: Blogs) =>
+    blogs.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    )
 
 export const getAdjacentPosts = (currentPostSlug: string, allPosts: Blogs) => {
     const currentIndex = allPosts.findIndex(
@@ -50,11 +49,7 @@ export const getBlogComments = async (slug: string) => {
         }
     })
 
-    console.log(data)
-
     return data
 }
 
-export const getBlog = (slug: string) => {
-    return BLOGS.find(blog => blog.slug === slug)
-}
+export const getBlog = (slug: string) => BLOGS.find(blog => blog.slug === slug)

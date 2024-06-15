@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 import React from 'react'
 import Link from 'next/link'
 

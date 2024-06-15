@@ -1,14 +1,15 @@
+/* eslint-disable import/no-default-export */
 import '@/styles/global.css'
 
 import { GoogleTagManager } from '@next/third-parties/google'
 import Link from 'next/link'
 import React, { PropsWithChildren } from 'react'
 import { Analytics } from '@vercel/analytics/react'
-import { Links, Meta } from '../types'
-import { SignInButton } from '@/components/SignIn'
-import { auth } from 'auth'
-import { SignOutButton } from '@/components/SignOut'
 import { GoogleAdsense } from '@/components/Adsense'
+import { Links } from '@/types/index'
+import { SignInButton } from '@/components/SignIn'
+import { SignOutButton } from '@/components/SignOut'
+import { auth } from 'auth'
 
 const links: Links = [
     {
@@ -41,8 +42,13 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                     <ul>
                         {links.map(link => (
                             <li key={link.href} className='inline mr-4'>
-                                {/** @ts-ignore */}
-                                <Link href={link.href}>{link.label}</Link>
+                                <Link
+                                    href={{
+                                        pathname: link.href
+                                    }}
+                                >
+                                    {link.label}
+                                </Link>
                             </li>
                         ))}
                     </ul>
