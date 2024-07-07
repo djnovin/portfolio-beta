@@ -11,14 +11,6 @@
             "warn",
             { "terms": ["fixme"], "location": "start" }
         ],
-        "max-lines": [
-            "warn",
-            { "max": 600, "skipBlankLines": true, "skipComments": true }
-        ],
-        "max-lines-per-function": [
-            "warn",
-            { "max": 70, "skipBlankLines": true, "skipComments": true }
-        ],
         "func-style": ["warn", "expression", { "allowArrowFunctions": true }],
         "import/no-cycle": "error"
     }
