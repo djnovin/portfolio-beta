@@ -19,10 +19,7 @@
             "warn",
             { "max": 70, "skipBlankLines": true, "skipComments": true }
         ],
-        "arrow-body-style": "warn",
         "func-style": ["warn", "expression", { "allowArrowFunctions": true }],
-        "import/no-cycle": "error",
-        "import/no-default-export": "warn",
-        "prefer-arrow-callback": "warn"
+        "import/no-cycle": "error"
     }
 }
