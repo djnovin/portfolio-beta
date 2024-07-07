@@ -1,17 +1,3 @@
 {
-    "extends": "next/core-web-vitals",
-    "rules": {
-        "indent": ["error", 4],
-        "no-console": ["warn"],
-        "no-fallthrough": "warn",
-        "no-undef": "error",
-        "no-unused-vars": "error",
-        "react/jsx-key": "warn",
-        "no-warning-comments": [
-            "warn",
-            { "terms": ["fixme"], "location": "start" }
-        ],
-        "func-style": ["warn", "expression", { "allowArrowFunctions": true }],
-        "import/no-cycle": "error"
-    }
+    "extends": "next/core-web-vitals"
 }
