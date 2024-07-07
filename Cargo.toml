@@ -18,4 +18,4 @@ vercel_runtime = { version = "1.1.1" }
 
 [[bin]]
 name = "hello"
-path = "src/api/hello.rs"
+path = "api/hello.rs"
