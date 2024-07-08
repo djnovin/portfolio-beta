@@ -29,7 +29,7 @@ export const ProgressBar = ({ ...props }: ComponentProps<'div'>) => {
 
     return (
         <div
-            className='left-0 top-0 w-full h-4 fixed bg-[#e0e0e0] z-100'
+            className='left-0 top-0 w-full h-2 fixed bg-[#e0e0e0] z-50'
             {...props}
         >
             <div

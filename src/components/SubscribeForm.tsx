@@ -28,19 +28,30 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
     return (
         <form
             action={handleSubscribe}
-            className='border border-solid border-black p-4 mt-8 flex flex-col'
+            className='mt-8 px-8 py-20 flex flex-col bg-gray-50'
         >
             <h2
                 aria-label='Subscribe to newsletter title'
-                className='text-2xl font-bold mb-4'
+                className='text-4xl font-bold mb-4 text-center'
                 role='heading'
             >
-                Subscribe
+                <span
+                    style={{
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundImage:
+                            'linear-gradient(90deg, #f12711 0%, #f5af19 100%)'
+                    }}
+                >
+                    Subscribe
+                </span>
+                <br />
+                Stay up to date.
             </h2>
 
             <p
                 aria-label='Subscribe to newsletter description'
-                className='mb-4'
+                className='mb-4 text-center text-gray-500'
                 role='description'
             >
                 If you enjoyed this article, consider subscribing to my
@@ -49,7 +60,7 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
             </p>
             <label
                 aria-label='Email label'
-                className='mb-2'
+                className='mb-4 font-medium text-gray-700'
                 htmlFor='email'
                 role='label'
             >
@@ -57,28 +68,29 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
             </label>
             <input
                 aria-label='Email input'
-                className='mb-4 rounded-none border border-solid border-black py-2 px-4'
+                className='mb-8 rounded-md border-solid border-gray-200 py-2 px-4 border-[0.75px] w-full'
                 name='email'
-                placeholder='Email'
+                placeholder='Email address'
                 role='textbox'
                 type='email'
             />
-            <div className='flex flex-row gap-x-2'>
-                <input
-                    aria-label='Subscribe to newsletter checkbox'
-                    id='subscribe'
-                    name='subscribe'
-                    role='checkbox'
-                    type='checkbox'
-                />
-                <label htmlFor='subscribe'>Subscribe to newsletter</label>
+            <div className='flex items-center justify-center'>
+                <div className='group relative w-full'>
+                    <div className='absolute -inset-1 rounded-xl bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 opacity-10 blur transition duration-500 group-hover:opacity-50'></div>
+                    <button
+                        type='button'
+                        className='relative rounded-lg bg-white px-7 py-4 text-black bg-clip-padding transition duration-500 w-full'
+                    >
+                        Subscribe
+                    </button>
+                </div>
             </div>
-            <button
-                className='bg-black text-white py-2 px-4 mt-4 rounded-none border border-solid border-black'
+            {/* <button
+                className='bg-black rounded-md text-white py-2 px-4 mt-4 border border-solid border-black'
                 type='submit'
             >
                 Subscribe
-            </button>
+            </button> */}
         </form>
     )
 }

@@ -5,6 +5,11 @@ import ReactMarkdown from 'react-markdown'
 import cn from 'classnames'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import ThumbsUp from '@geist-ui/icons/thumbsUp'
+import ThumbsDown from '@geist-ui/icons/thumbsDown'
+import MessageCircle from '@geist-ui/icons/messageCircle'
+import MoreHorizontal from '@geist-ui/icons/moreHorizontal'
+
 import {
     Breadcrumbs,
     CommentInput,
@@ -99,37 +104,32 @@ export default async function page({ params }: { params: { slug: string } }) {
         <>
             <ProgressBar />
             <ScrollToTopButton />
-            <div className='px-8 pb-20'>
-                <AdBanner
+            <div className='pb-20'>
+                {/* <AdBanner
                     dataAdFormat='auto'
                     dataAdLayout='in-article'
                     dataAdSlot='3651028178'
                     dataFullWidthResponsive={true}
-                />
-                {blog && (
-                    <Breadcrumbs
-                        crumbs={[
-                            { label: 'Blog', path: '/blog' },
-                            { label: blog.title, path: `/blog/${blog.slug}` }
-                        ]}
-                        aria-label='Breadcrumb navigation'
-                    />
-                )}
-                <RemoteMdxPage slug={params.slug} />
-                <div className='my-20' aria-label='Helpful article feedback'>
-                    <p className='text-center font-semibold text-lg'>
-                        Did you find this article helpful?
-                    </p>
-                    <form className='flex flex-row gap-x-4 justify-center mt-4'>
-                        <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
-                            Yes
-                        </button>
-                        <button className='bg-black text-white py-2 px-4 rounded-none border border-solid border-black'>
-                            No
-                        </button>
-                    </form>
-                </div>
-                <div className='mt-8'>
+                /> */}
+                <section>
+                    {/* {blog && (
+                        <Breadcrumbs
+                            crumbs={[
+                                { label: 'Blog', path: '/blog' },
+                                {
+                                    label: blog.title,
+                                    path: `/blog/${blog.slug}`
+                                }
+                            ]}
+                            aria-label='Breadcrumb navigation'
+                        />
+                    )} */}
+                </section>
+                <section className='px-8'>
+                    <RemoteMdxPage slug={params.slug} />
+                </section>
+                <DidYouFindThisArticleHelpful />
+                <section className='mt-8 px-8'>
                     <div>
                         {session ? (
                             <form
@@ -307,7 +307,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                 return (
                                                     <div className='relative my-4 w-full'>
                                                         <SyntaxHighlighter
-                                                            className='!my-0 !px-4 !py-0 !bg-gray-50 w-full !text-sm'
+                                                            className='!my-0 !px-4 !py-0 !bg-gray-50 w-full !text-sm !rounded-md !overflow-clip !shadow-sm !group !hover:cursor-text !transition-colors !duration-200 !ease-in-out !border !border-gray-200'
                                                             language={language}
                                                             wrapLines={true}
                                                             aria-label={`Code block in ${language}`}
@@ -324,77 +324,37 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     </ReactMarkdown>
                                     <div className='flex flex-row'>
                                         <button
-                                            className='py-1 px-4 flex flex-row justify-center items-center space-x-2 rounded-none hover:bg-gray-100'
+                                            className='p-4 flex flex-row justify-center items-center hover:bg-gray-100 rounded-full'
                                             aria-label={`Like comment`}
                                         >
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                fill='none'
-                                                viewBox='0 0 24 24'
-                                                strokeWidth={1.5}
-                                                stroke='currentColor'
-                                                className='size-6'
-                                            >
-                                                <path
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    d='M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z'
-                                                />
-                                            </svg>
-
-                                            <span className='text-sm font-medium'>
-                                                Like
-                                            </span>
+                                            <ThumbsUp className='size-4' />
                                         </button>
                                         <button
-                                            className='py-1 px-4 flex flex-row justify-center items-center space-x-2 rounded-none hover:bg-gray-100'
+                                            className='p-4 flex flex-row justify-center items-center hover:bg-gray-100 rounded-full'
+                                            aria-label={`Dislike comment`}
+                                        >
+                                            <ThumbsDown className='size-4' />
+                                        </button>
+                                        <button
+                                            className='p-4 flex flex-row justify-center items-center hover:bg-gray-100 rounded-full'
                                             aria-label={`Reply to comment`}
                                         >
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                fill='none'
-                                                viewBox='0 0 24 24'
-                                                strokeWidth={1.5}
-                                                stroke='currentColor'
-                                                className='size-6'
-                                            >
-                                                <path
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    d='M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z'
-                                                />
-                                            </svg>
-
-                                            <span className='text-sm font-medium'>
-                                                Reply
-                                            </span>
+                                            <MessageCircle className='size-4' />
                                         </button>
-                                        <button>
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                fill='none'
-                                                viewBox='0 0 24 24'
-                                                strokeWidth={1.5}
-                                                stroke='currentColor'
-                                                className='size-6'
-                                            >
-                                                <path
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    d='M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
-                                                />
-                                            </svg>
+                                        <button
+                                            className='p-4 flex flex-row justify-center items-center hover:bg-gray-100 rounded-full'
+                                            aria-label={`More options`}
+                                        >
+                                            <MoreHorizontal className='size-4' />
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         )
                     })}
-                </div>
-                <DidYouFindThisArticleHelpful />
+                </section>
                 <SubscribeForm params={params} />
                 <AdjacentPosts prevPost={prevPost} nextPost={nextPost} />
-                <RelatedPosts params={params} similarPosts={similarPosts} />
             </div>
         </>
     )

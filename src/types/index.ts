@@ -33,12 +33,13 @@ export type Tag =
 export type Tags = Tag[]
 
 export type Blog = {
-    id: number
-    title: string
-    slug: string
-    date: string
     content: string
+    date: string
+    featured: boolean
+    id: number
+    slug: string
     tags: Tags
+    title: string
 }
 
 export type Blogs = Blog[]

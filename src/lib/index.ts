@@ -2,6 +2,8 @@ import { BLOGS } from '@/constants/blog'
 import { Blogs } from '@/types/index'
 import { prisma } from 'auth'
 
+export const isFeatured = (blog: Blogs) => blog.featured
+
 export const sortByDate = (blogs: Blogs) =>
     blogs.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()

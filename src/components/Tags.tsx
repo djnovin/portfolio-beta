@@ -33,7 +33,7 @@ export const Tags = (props: CategoryProps & ComponentProps<'div'>) => {
         <div
             aria-label={getAriaLabel(tags)}
             className={cn(
-                'px-2 py-1 text-xs font-mono',
+                'px-2 py-1 text-xs font-mono rounded-full group',
                 {
                     'bg-blue-200 text-blue-800 group-hover:bg-blue-300':
                         (tags && tags.includes('axum')) ||

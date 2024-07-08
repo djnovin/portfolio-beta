@@ -2,14 +2,12 @@
 import '@/styles/global.css'
 
 import { GoogleTagManager } from '@next/third-parties/google'
-import Link from 'next/link'
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { GoogleAdsense } from '@/components/Adsense'
 import { Links } from '@/types/index'
-import { SignInButton } from '@/components/SignIn'
-import { SignOutButton } from '@/components/SignOut'
 import { auth } from 'auth'
+import NavHeader from '@/components/NavHeader'
 
 const links: Links = [
     {
@@ -38,23 +36,10 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                 />
             </head>
             <body className='selection:bg-[#d2fd78] scroll-smooth'>
-                <nav className='flex justify-between items-center p-8'>
-                    <ul>
-                        {links.map(link => (
-                            <li key={link.href} className='inline mr-4'>
-                                <Link
-                                    href={{
-                                        pathname: link.href
-                                    }}
-                                >
-                                    {link.label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    {session ? <SignOutButton /> : <SignInButton />}
-                </nav>
-                <div className='max-w-4xl container mx-auto'>{children}</div>
+                <NavHeader isAuth={session} links={links} />
+                <div className='max-w-4xl pt-20 container mx-auto'>
+                    {children}
+                </div>
             </body>
             <Analytics />
         </html>

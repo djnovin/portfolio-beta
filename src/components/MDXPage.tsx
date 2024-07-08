@@ -4,24 +4,20 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 import fs from 'fs'
 import path from 'path'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useMDXComponents } from 'mdx-components'
 
 import { CopyButton } from './CopyButton'
-import { TypographicRatios } from 'types'
 import { TYPOGRAPHIC_RATIOS } from '@/constants/typography'
 
-export const H1 = (
-    props: ComponentProps<'h1'> & { styles: TypographicRatios }
-) => {
-    const { children, styles, ...rest } = props
+export const H1 = (props: ComponentProps<'h1'>) => {
+    const { children, ...rest } = props
     return (
         <h1
             {...rest}
             className='font-bold mb-5'
             style={{
-                fontSize: styles.h1 + 'px',
-                lineHeight: styles.h1 * 1.2 + 'px',
+                fontSize: TYPOGRAPHIC_RATIOS.h1 + 'px',
+                lineHeight: TYPOGRAPHIC_RATIOS.h1 * 1.2 + 'px',
                 margin: '20px 0'
             }}
             tabIndex={0}
@@ -31,17 +27,15 @@ export const H1 = (
     )
 }
 
-export const H2 = (
-    props: ComponentProps<'h2'> & { styles: TypographicRatios }
-) => {
-    const { children, styles, ...rest } = props
+export const H2 = (props: ComponentProps<'h2'>) => {
+    const { children, ...rest } = props
     return (
         <h2
             {...rest}
-            className='font-medium mb-5'
+            className='mb-5 font-semibold'
             style={{
-                fontSize: styles.h2 + 'px',
-                lineHeight: styles.h2 * 1.2 + 'px',
+                fontSize: TYPOGRAPHIC_RATIOS.h2 + 'px',
+                lineHeight: TYPOGRAPHIC_RATIOS.h2 * 1.2 + 'px',
                 margin: '20px 0'
             }}
             tabIndex={0}
@@ -51,17 +45,15 @@ export const H2 = (
     )
 }
 
-export const H3 = (
-    props: ComponentProps<'h3'> & { styles: TypographicRatios }
-) => {
-    const { children, styles, ...rest } = props
+export const H3 = (props: ComponentProps<'h3'>) => {
+    const { children, ...rest } = props
     return (
         <h3
             {...rest}
             className='font-semibold mb-5'
             style={{
-                fontSize: styles.h3 + 'px',
-                lineHeight: styles.h3 * 1.2 + 'px'
+                fontSize: TYPOGRAPHIC_RATIOS.h3 + 'px',
+                lineHeight: TYPOGRAPHIC_RATIOS.h3 * 1.2 + 'px'
             }}
             tabIndex={0}
         >
@@ -70,16 +62,14 @@ export const H3 = (
     )
 }
 
-export const P = (
-    props: ComponentProps<'p'> & { styles: TypographicRatios }
-) => {
-    const { children, styles, ...rest } = props
+export const P = (props: ComponentProps<'p'>) => {
+    const { children, ...rest } = props
     return (
         <p
             {...rest}
             style={{
-                fontSize: styles.p + 'px',
-                lineHeight: styles.p * 1.2 + 'px',
+                fontSize: TYPOGRAPHIC_RATIOS.p + 'px',
+                lineHeight: TYPOGRAPHIC_RATIOS.p * 1.2 + 'px',
                 margin: '20px 0'
             }}
         >
@@ -133,24 +123,18 @@ export const Code = (
     const language = className?.replace('language-', '') || 'text'
 
     return (
-        <div className='relative my-10 border border-solid border-black'>
-            <div className='flex flex-row justify-between gap-4 space-x-4 items-center bg-gray-100'>
-                <div>
-                    <span className='pl-4'>{language}</span>
-                </div>
-                {codeString && codeString.toString().length > 0 && (
-                    <CopyButton
-                        aria-label='Copy code'
-                        textString={codeString?.toString()}
-                    />
-                )}
-            </div>
-            <div className='w-full border-t border-solid border-black'></div>
+        <div className='relative my-10 border rounded-md overflow-clip shadow-sm group hover:cursor-text'>
+            {codeString && codeString.toString().length > 0 && (
+                <CopyButton
+                    className='absolute top-0 right-0 group-hover:opacity-100 opacity-0 transition-all duration-200 ease-in-out'
+                    aria-label='Copy code'
+                    textString={codeString?.toString()}
+                />
+            )}
             <SyntaxHighlighter
                 aria-label={`Code block in ${language}`}
-                className='!my-0 !px-4 !bg-gray-50'
+                className='!my-0 !px-4 !bg-white !text-xs overflow-x-auto !font-mono'
                 language={language}
-                style={solarizedlight}
                 wrapLines={true}
             >
                 {codeString?.toString() || ''}
@@ -174,10 +158,10 @@ export const RemoteMdxPage = (props: MDXPageProps) => {
         <MDXRemote
             source={source}
             components={useMDXComponents({
-                h1: () => <H1 styles={TYPOGRAPHIC_RATIOS} />,
-                h2: () => <H2 styles={TYPOGRAPHIC_RATIOS} />,
-                h3: () => <H3 styles={TYPOGRAPHIC_RATIOS} />,
-                p: () => <P styles={TYPOGRAPHIC_RATIOS} />,
+                h1: H1,
+                h2: H2,
+                h3: H3,
+                p: P,
                 a: A,
                 strong: Strong,
                 ul: UL,
