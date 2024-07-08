@@ -37,9 +37,7 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
             </head>
             <body className='selection:bg-[#d2fd78] scroll-smooth'>
                 <NavHeader isAuth={session} links={links} />
-                <div className='max-w-4xl pt-20 container mx-auto'>
-                    {children}
-                </div>
+                <div className='pt-20'>{children}</div>
             </body>
             <Analytics />
         </html>

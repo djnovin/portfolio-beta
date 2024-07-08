@@ -13,7 +13,7 @@ export const BLOGS: Blogs = [
     },
     {
         id: 2,
-        featured: false,
+        featured: true,
         content:
             'Fetching data is easier than ever in Rust. Here is how you can do it.',
         date: '2024-06-11',
@@ -23,7 +23,7 @@ export const BLOGS: Blogs = [
     },
     {
         id: 3,
-        featured: false,
+        featured: true,
         title: 'Zero to Hero with Actix Web',
         slug: 'zero-to-hero-with-actix-web',
         date: '2024-06-11',
