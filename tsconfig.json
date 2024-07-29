@@ -104,7 +104,7 @@
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
         "noEmit": true,
-        "moduleResolution": "bundler",
+        "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
         "plugins": [

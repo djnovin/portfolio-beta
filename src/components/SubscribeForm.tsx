@@ -29,9 +29,9 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
         <section className='bg-gray-50'>
             <form
                 action={handleSubscribe}
-                className='mt-8 px-8 py-20 flex flex-col lg:justify-between lg:items-center lg:flex-row max-w-4xl mx-auto gap-10'
+                className='mt-8 px-8 py-20 flex flex-col lg:justify-between lg:items-center lg:max-w-6xl lg:flex-row mx-auto gap-10 lg:gap-8'
             >
-                <div>
+                <div className='w-full'>
                     <h2
                         aria-label='Subscribe to newsletter title'
                         className='text-4xl lg:text-5xl font-bold mb-4 text-center lg:text-left'
@@ -61,7 +61,7 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
                         publish a new article.
                     </p>
                 </div>
-                <div>
+                <div className='w-full'>
                     <label
                         aria-label='Email label'
                         className='mb-4 font-medium text-gray-700'
@@ -90,12 +90,6 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
                         </div>
                     </div>
                 </div>
-                {/* <button
-                className='bg-black rounded-md text-white py-2 px-4 mt-4 border border-solid border-black'
-                type='submit'
-            >
-                Subscribe
-            </button> */}
             </form>
         </section>
     )
