@@ -8,6 +8,7 @@ import { GoogleAdsense } from '@/components/Adsense'
 import { Links } from '@/types/index'
 import { auth } from 'auth'
 import NavHeader from '@/components/NavHeader'
+import { ReactLenis } from '@/lib/lenis'
 
 const links: Links = [
     {
@@ -36,8 +37,10 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                 />
             </head>
             <body className='selection:bg-[#d2fd78] scroll-smooth'>
-                <NavHeader isAuth={session} links={links} />
-                <div className='pt-20'>{children}</div>
+                <ReactLenis root>
+                    <NavHeader isAuth={session} links={links} />
+                    <div className='pt-20'>{children}</div>
+                </ReactLenis>
             </body>
             <Analytics />
         </html>

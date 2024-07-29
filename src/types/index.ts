@@ -34,6 +34,7 @@ export type Tags = Tag[]
 
 export type Blog = {
     content: string
+    image: string
     date: string
     featured: boolean
     id: number

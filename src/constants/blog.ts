@@ -4,6 +4,7 @@ export const BLOGS: Blogs = [
     {
         id: 1,
         featured: true,
+        image: '/images/2024-frontend-predictions.png',
         content:
             'I predict that in 2024, frontend development will be a lot easier than it is today.',
         date: '2024-01-01',
@@ -14,6 +15,7 @@ export const BLOGS: Blogs = [
     {
         id: 2,
         featured: true,
+        image: '/images/using-rust-in-nextjs-api-routes.png',
         content:
             'Fetching data is easier than ever in Rust. Here is how you can do it.',
         date: '2024-06-11',
@@ -24,6 +26,7 @@ export const BLOGS: Blogs = [
     {
         id: 3,
         featured: true,
+        image: '/images/zero-to-hero-with-actix-web.png',
         title: 'Zero to Hero with Actix Web',
         slug: 'zero-to-hero-with-actix-web',
         date: '2024-06-11',
