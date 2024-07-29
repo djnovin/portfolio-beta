@@ -7,6 +7,7 @@ import { Tags } from '@/components/Tags'
 import { BLOGS } from '@/constants/blog'
 import { sortByDate } from '@/lib/index'
 import { SubscribeForm } from '@/components/SubscribeForm'
+import Footer from '@/components/Footer'
 
 export const metadata = {
     title: 'Blog | Novin Noori - Software Engineer',
@@ -148,6 +149,7 @@ const page = () => {
                     slug: '/'
                 }}
             />
+            <Footer />
         </>
     )
 }
