@@ -36,6 +36,7 @@ import { AdjacentPosts } from '@/components/AdjacentPosts'
 import { DidYouFindThisArticleHelpful } from '@/components/DidYouFindThisArticleHelpful'
 import { SubscribeForm } from '@/components/SubscribeForm'
 import { RelatedPosts } from '@/components/RelatedPosts'
+import Footer from '@/components/Footer'
 
 export const generateMetadata = async ({
     params
@@ -111,25 +112,11 @@ export default async function page({ params }: { params: { slug: string } }) {
                     dataAdSlot='3651028178'
                     dataFullWidthResponsive={true}
                 /> */}
-                <section>
-                    {/* {blog && (
-                        <Breadcrumbs
-                            crumbs={[
-                                { label: 'Blog', path: '/blog' },
-                                {
-                                    label: blog.title,
-                                    path: `/blog/${blog.slug}`
-                                }
-                            ]}
-                            aria-label='Breadcrumb navigation'
-                        />
-                    )} */}
-                </section>
-                <section className='px-8'>
+                <section className='px-8 container mx-auto max-w-6xl'>
                     <RemoteMdxPage slug={params.slug} />
                 </section>
-                <DidYouFindThisArticleHelpful />
-                <section className='mt-8 px-8'>
+                {/* <DidYouFindThisArticleHelpful /> */}
+                <section className='mt-8 px-8 container mx-auto max-w-6xl'>
                     <div>
                         {session ? (
                             <form
@@ -354,7 +341,8 @@ export default async function page({ params }: { params: { slug: string } }) {
                     })}
                 </section>
                 <SubscribeForm params={params} />
-                <AdjacentPosts prevPost={prevPost} nextPost={nextPost} />
+                <Footer />
+                {/* <AdjacentPosts prevPost={prevPost} nextPost={nextPost} /> */}
             </div>
         </>
     )

@@ -2,8 +2,6 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { Tag } from '@/types/index'
-import { Tags } from '@/components/Tags'
 import { BLOGS } from '@/constants/blog'
 import { sortByDate } from '@/lib/index'
 import { SubscribeForm } from '@/components/SubscribeForm'
@@ -49,19 +47,6 @@ const page = () => {
                                 className=''
                                 role='article'
                             >
-                                {/* <div
-                                    aria-label='Tags'
-                                    className='flex flex-row gap-x-2'
-                                >
-                                    {blog.tags &&
-                                        blog.tags.map(tag => (
-                                            <Tags
-                                                aria-label={`Tag: ${tag}`}
-                                                key={`${blog.id}-${tag}`}
-                                                tags={tag as Tag}
-                                            />
-                                        ))}
-                                </div> */}
                                 <div className='flex flex-col gap-2 w-full'>
                                     <span
                                         className='group-hover:underline font-semibold text-xl text-white'
@@ -105,19 +90,6 @@ const page = () => {
                             className='flex flex-col md:flex-row md:items-center gap-2'
                             role='article'
                         >
-                            {/* <div
-                            aria-label='Tags'
-                            className='flex flex-row gap-x-2'
-                        >
-                            {blog.tags &&
-                                blog.tags.map(tag => (
-                                    <Tags
-                                        aria-label={`Tag: ${tag}`}
-                                        key={`${blog.id}-${tag}`}
-                                        tags={tag as Tag}
-                                    />
-                                ))}
-                        </div> */}
                             <span
                                 className='group-hover:underline font-semibold'
                                 id={`blog-title-${blog.id}`}

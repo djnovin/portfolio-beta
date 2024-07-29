@@ -29,12 +29,12 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
         <section className='bg-gray-50'>
             <form
                 action={handleSubscribe}
-                className='mt-8 px-8 py-20 flex flex-col lg:justify-between lg:items-center lg:max-w-6xl lg:flex-row mx-auto gap-10 lg:gap-8'
+                className='mt-8 px-8 py-20 flex flex-col lg:justify-between lg:items-center lg:max-w-6xl lg:flex-row mx-auto gap-10 lg:gap-10'
             >
                 <div className='w-full'>
                     <h2
                         aria-label='Subscribe to newsletter title'
-                        className='text-4xl lg:text-5xl font-bold mb-4 text-center lg:text-left'
+                        className='text-4xl lg:text-3xl font-bold mb-4 text-center lg:text-left'
                         role='heading'
                     >
                         <span
@@ -53,7 +53,7 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
 
                     <p
                         aria-label='Subscribe to newsletter description'
-                        className='mb-4 lg:text-left lg:text-xl text-center text-gray-500'
+                        className='mb-4 lg:text-left lg:text-lg text-center text-gray-500'
                         role='description'
                     >
                         If you enjoyed this article, consider subscribing to my
