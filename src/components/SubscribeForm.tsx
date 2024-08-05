@@ -26,7 +26,7 @@ export const SubscribeForm = (props: { params: { slug: string } }) => {
     }
 
     return (
-        <section className='bg-gray-50'>
+        <section className='bg-[#] !text-[#332147]'>
             <form
                 action={handleSubscribe}
                 className='mt-8 px-8 py-20 flex flex-col lg:justify-between lg:items-center lg:max-w-6xl lg:flex-row mx-auto gap-10 lg:gap-10'

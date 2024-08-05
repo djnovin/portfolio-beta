@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --main-font-family: 'Nimbus Sans D OT', 'Helvetica Neue', 'Helvetica',
+        'Arial', sans-serif;
+}
+
+body {
+    cursor: none;
+}
+
 .progress-bar-container {
     position: fixed;
     top: 0;
@@ -17,4 +26,17 @@
     background-color: #3b82f6;
     width: 0%;
     z-index: 1000;
+}
+
+.custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    mix-blend-mode: difference; /* Inverse color effect */
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
