@@ -79,7 +79,7 @@ const NavHeader = (
                             key={link.href}
                             className='w-full h-full hover:bg-[#F4F3F1] min-w-[100px] flex justify-center items-center'
                         >
-                            <Link href={link.href}>{link.label}</Link>
+                            <Link href={link.href as Object}>{link.label}</Link>
                         </li>
                         <div className='w-full h-full border-r border-gray-300'></div>
                     </>

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import LoadingBar from '../components/LoadingBar'
 import { usePathname } from 'next/navigation'
 
 export default function Template({
@@ -55,7 +54,6 @@ export default function Template({
 
     return (
         <>
-            {loading && <LoadingBar />}
             <div ref={containerRef} style={{ height: '100%' }}>
                 {children}
             </div>
