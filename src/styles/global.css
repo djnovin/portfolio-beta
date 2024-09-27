@@ -7,10 +7,6 @@
         'Arial', sans-serif;
 }
 
-body {
-    cursor: none;
-}
-
 .progress-bar-container {
     position: fixed;
     top: 0;
@@ -39,4 +35,70 @@ body {
     z-index: 10000;
     mix-blend-mode: difference; /* Inverse color effect */
     transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.hover-fill {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    transition: color 0.3s ease; /* Optional: smooth color transition */
+}
+
+.hover-fill::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e0ff85; /* Fill color */
+    transition: top 0.3s ease;
+    z-index: -1;
+}
+
+.hover-fill:hover::before {
+    top: 0;
+}
+
+.hover-fill:hover {
+    color: #1f5040; /* Optional: change text color on hover */
+}
+
+.highlighted-text {
+    background: linear-gradient(transparent 70%, #e0ff85 70%);
+    display: inline;
+}
+
+.scroll-container {
+    position: relative;
+    width: 100%;
+    height: 200vh; /* Ensure enough space to scroll */
+}
+
+.video-container {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-out;
+}
+
+.text-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 100vh; /* Ensure text appears after some scrolling */
+}
+
+.feature-text {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    opacity: 0; /* Initial state hidden */
 }

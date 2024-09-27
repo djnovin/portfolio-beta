@@ -24,26 +24,32 @@ export default function Template({
             pathname === '/' && prevPathnameRef.current?.startsWith('/blog')
 
         if (loading) {
+            let xValue = 0
+            if (isNavigatingFromHomeToBlog) {
+                xValue = 500
+            } else if (isNavigatingFromBlogToHome) {
+                xValue = -500
+            }
+
             gsap.to(containerRef.current, {
                 opacity: 0,
-                x: isNavigatingFromHomeToBlog
-                    ? 500
-                    : isNavigatingFromBlogToHome
-                    ? -500
-                    : 0,
+                x: xValue,
                 duration: 0.5,
                 ease: 'power3.inOut'
             })
         } else {
+            let xValue = 0
+            if (isNavigatingFromHomeToBlog) {
+                xValue = -500
+            } else if (isNavigatingFromBlogToHome) {
+                xValue = 500
+            }
+
             gsap.fromTo(
                 containerRef.current,
                 {
                     opacity: 0,
-                    x: isNavigatingFromHomeToBlog
-                        ? -500
-                        : isNavigatingFromBlogToHome
-                        ? 500
-                        : 0
+                    x: xValue
                 },
                 { opacity: 1, x: 0, duration: 0.5, ease: 'power3.inOut' }
             )

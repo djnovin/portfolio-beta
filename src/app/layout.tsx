@@ -1,4 +1,5 @@
 /* eslint-disable import/no-default-export */
+
 import '@/styles/global.css'
 
 import NavHeader from '@/components/NavHeader'
@@ -8,9 +9,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { GoogleAdsense } from '@/components/Adsense'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { Links } from '@/types/index'
-import { ReactLenis } from '@/lib/lenis'
 import { auth } from 'auth'
-import CustomCursor from '@/components/CustomCursor'
 
 const links: Links = [
     {
@@ -39,13 +38,10 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                 />
             </head>
             <body className='selection:bg-[#d2fd78] bg-[#E2E2E6] scroll-smooth'>
-                <CustomCursor />
-                <ReactLenis root>
-                    <NavHeader isAuth={session} links={links} />
-                    <Template loading={false}>
-                        <div className='pt-20'>{children}</div>
-                    </Template>
-                </ReactLenis>
+                <NavHeader isAuth={session} links={links} />
+                <Template loading={false}>
+                    <div className='pt-[64px]'>{children}</div>
+                </Template>
             </body>
             <Analytics />
         </html>

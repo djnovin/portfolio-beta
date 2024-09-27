@@ -28,7 +28,7 @@ const NavHeader = (
                 setTimer(
                     setTimeout(() => {
                         setIsNavVisible(false)
-                    }, 1000) // Delay in milliseconds
+                    }) // Delay in milliseconds
                 )
             } else {
                 if (timer) {
@@ -61,11 +61,11 @@ const NavHeader = (
     return (
         <nav
             className={cn(
-                'fixed w-full flex bg-inherit border border-solid border-b justify-between items-center transition-all duration-500 z-[1000] h-[64px] border-gray-300',
+                'fixed w-full flex bg-[#F4F3F1] border-solid border-b justify-between items-center transition-all duration-500 z-[1000] h-[64px] border-gray-300',
                 {
-                    'transform-none bg-inherit border border-solid border-b':
+                    'transform-none border-solid border-b':
                         isNavVisible && lastScrollY > 0 && lastScrollY < 50,
-                    'h-[32px] transform-none bg-inherit border border-solid border-b':
+                    'h-[32px] transform-none border-solid border-b':
                         isNavVisible && lastScrollY > 50,
                     '-translate-y-full': !isNavVisible
                 }

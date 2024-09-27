@@ -37,7 +37,7 @@ export const ScrollToTopButton = () => {
             {isVisible && (
                 <button
                     onClick={scrollToTop}
-                    className='w-12 h-12 flex z-[1000] rounded-full justify-center items-center text-white bg-black fixed right-8 bottom-8 cursor-pointer shadow-sm border-none hover:scale-105 transition-all duration-150'
+                    className='w-12 h-12 flex z-[1000] rounded-full justify-center items-center text-white bg-black sticky right-8 bottom-8 cursor-pointer shadow-sm border-none hover:scale-105 transition-all duration-150'
                 >
                     <svg
                         xmlns='http://www.w3.org/2000/svg'

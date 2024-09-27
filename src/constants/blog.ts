@@ -15,7 +15,7 @@ export const BLOGS: Blogs = [
     {
         id: 2,
         featured: true,
-        image: '/images/using-rust-in-nextjs-api-routes.png',
+        image: '/images/using-rust-in-nextjs-api-routes.webp',
         content:
             'Fetching data is easier than ever in Rust. Here is how you can do it.',
         date: '2024-06-11',

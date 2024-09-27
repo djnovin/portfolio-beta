@@ -1,12 +1,16 @@
 'use client'
+
 import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { isMobileDevice } from 'helpers/device'
 
 const CustomCursor = () => {
     const cursorRef = useRef<HTMLDivElement>(null)
-    const proximityThreshold = 60 // Distance within which the magnetic effect is triggered
+    const proximityThreshold = 20
 
     useEffect(() => {
+        if (isMobileDevice()) return
+
         const handleMouseMove = (event: MouseEvent) => {
             const cursor = cursorRef.current
             if (!cursor) return
@@ -52,6 +56,10 @@ const CustomCursor = () => {
             window.removeEventListener('mousemove', handleMouseMove)
         }
     }, [])
+
+    if (isMobileDevice()) {
+        return null
+    }
 
     return <div ref={cursorRef} className='custom-cursor' />
 }
