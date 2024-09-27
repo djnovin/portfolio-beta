@@ -39,7 +39,7 @@ const Page = () => {
                     {featuredBlogs.map(blog => (
                         <Link
                             className='flex flex-col md:justify-end gap-2 group w-full h-[320px] md:h-[480px] bg-[#F4F3F1] p-4'
-                            href={`/blog/${blog.slug}`}
+                            href={`/${blog.slug}`}
                             key={blog.id}
                         >
                             <article

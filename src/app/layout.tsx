@@ -11,14 +11,10 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import { Links } from '@/types/index'
 import { auth } from 'auth'
 
-const links: Links = [
+const LINKS: Links = [
     {
         href: '/',
         label: 'Home'
-    },
-    {
-        href: '/blog',
-        label: 'Blog'
     }
 ]
 
@@ -38,7 +34,7 @@ const RootLayout = async ({ children }: PropsWithChildren<{}>) => {
                 />
             </head>
             <body className='selection:bg-[#d2fd78] bg-[#E2E2E6] scroll-smooth'>
-                <NavHeader isAuth={session} links={links} />
+                <NavHeader isAuth={session} links={LINKS} />
                 <Template loading={false}>
                     <div className='pt-[64px]'>{children}</div>
                 </Template>

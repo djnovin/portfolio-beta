@@ -28,7 +28,7 @@ const NavHeader = (
                 setTimer(
                     setTimeout(() => {
                         setIsNavVisible(false)
-                    }) // Delay in milliseconds
+                    })
                 )
             } else {
                 if (timer) {
@@ -41,7 +41,6 @@ const NavHeader = (
 
         const handleMouseMove = (e: MouseEvent) => {
             if (e.clientY < 50) {
-                // Adjust the threshold as needed
                 setIsNavVisible(true)
             }
         }
