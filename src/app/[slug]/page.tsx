@@ -5,37 +5,19 @@ import ReactMarkdown from 'react-markdown'
 import cn from 'classnames'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
-import ThumbsUp from '@geist-ui/icons/thumbsUp'
-import ThumbsDown from '@geist-ui/icons/thumbsDown'
-import MessageCircle from '@geist-ui/icons/messageCircle'
-import MoreHorizontal from '@geist-ui/icons/moreHorizontal'
 
 import {
-    Breadcrumbs,
     CommentInput,
     DeleteCommentButton,
-    ProgressBar,
-    ScrollToTopButton,
     SignInButton
 } from '@/components/index'
-import { BLOGS } from '@/constants/blog'
 import { Metadata } from 'next'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { Props } from '@/types/index'
 import { auth, prisma } from 'auth'
 import { revalidatePath } from 'next/cache'
-import {
-    getAdjacentPosts,
-    getBlog,
-    getBlogComments,
-    getSimilarPosts
-} from '@/lib/index'
-import { AdBanner } from '@/components/AdBanner'
+import { getBlog, getBlogComments } from '@/lib/index'
 import { RemoteMdxPage } from '@/components/MDXPage'
-import { AdjacentPosts } from '@/components/AdjacentPosts'
-import { DidYouFindThisArticleHelpful } from '@/components/DidYouFindThisArticleHelpful'
-import { SubscribeForm } from '@/components/SubscribeForm'
-import { RelatedPosts } from '@/components/RelatedPosts'
 import Footer from '@/components/Footer'
 
 export const generateMetadata = async ({
@@ -68,11 +50,6 @@ export const generateMetadata = async ({
 }
 
 export default async function page({ params }: { params: { slug: string } }) {
-    const blog = getBlog(params.slug)
-    const similarPosts = getSimilarPosts(params.slug, BLOGS)
-
-    const { prevPost, nextPost } = getAdjacentPosts(params.slug, BLOGS)
-
     const comments = await getBlogComments(params.slug)
 
     const handleComment = async (formData: FormData) => {
@@ -120,7 +97,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                         alt='Profile picture'
                                         objectFit='cover'
                                         objectPosition='center'
-                                        src={session?.user?.image || ''}
+                                        src={session?.user?.image ?? ''}
                                         priority={false}
                                         quality={75}
                                     />
@@ -143,7 +120,6 @@ export default async function page({ params }: { params: { slug: string } }) {
                             <p
                                 className='mb-4'
                                 aria-label='Comment description'
-                                role='description'
                             >
                                 If you want to comment, please sign in first.
                             </p>
@@ -211,26 +187,17 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     rehypePlugins={[rehypeRaw]}
                                     components={{
                                         h1: ({ children }) => (
-                                            <h1
-                                                className='font-bold'
-                                                tabIndex={0}
-                                            >
+                                            <h1 className='font-bold'>
                                                 {children}
                                             </h1>
                                         ),
                                         h2: ({ children }) => (
-                                            <h2
-                                                className='font-medium'
-                                                tabIndex={0}
-                                            >
+                                            <h2 className='font-medium'>
                                                 {children}
                                             </h2>
                                         ),
                                         h3: ({ children }) => (
-                                            <h3
-                                                className='font-semibold'
-                                                tabIndex={0}
-                                            >
+                                            <h3 className='font-semibold'>
                                                 {children}
                                             </h3>
                                         ),
@@ -269,7 +236,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                 className?.replace(
                                                     'language-',
                                                     ''
-                                                ) || 'typescript'
+                                                ) ?? 'typescript'
                                             const codeString = Array.isArray(
                                                 children
                                             )
@@ -284,7 +251,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                                         wrapLines={true}
                                                         aria-label={`Code block in ${language}`}
                                                     >
-                                                        {codeString?.toString() ||
+                                                        {codeString?.toString() ??
                                                             ''}
                                                     </SyntaxHighlighter>
                                                 </div>
@@ -294,7 +261,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                 >
                                     {comment.body}
                                 </ReactMarkdown>
-                                <div className='flex flex-row'>
+                                {/* <div className='flex flex-row'>
                                     <button
                                         className='p-4 flex flex-row justify-center items-center hover:bg-gray-100 rounded-full'
                                         aria-label={`Like comment`}
@@ -319,7 +286,7 @@ export default async function page({ params }: { params: { slug: string } }) {
                                     >
                                         <MoreHorizontal className='size-4' />
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )
